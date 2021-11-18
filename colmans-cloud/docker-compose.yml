@@ -52,6 +52,19 @@ services:
       caddy: office.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9980}}"
 
+  backup:
+    image: blacklabelops/volumerize
+    volumes:
+      - nextcloud:/source:ro
+      - db:/source2:ro
+    environment:
+      VOLUMERIZE_SOURCE1: /source
+      VOLUMERIZE_SOURCE2: /source2
+      VOLUMERIZE_TARGET1: s3://colman-nextcloud-backup/nextcloud
+      VOLUMERIZE_TARGET2: s3://colman-nextcloud-backup/db
+      AWS_ACCESS_KEY_ID: foo
+      AWS_SECRET_ACCESS_KEY: bar
+
 volumes:
   db:
   nextcloud:

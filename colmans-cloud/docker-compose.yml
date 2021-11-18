@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:10.5
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD:${MYSQL_PASSWORD}
+    volumes:
+      - db:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  app:
+    build: nextcloud
+    restart: always
+    networks:
+      - caddy
+      - default
+    volumes:
+      - nextcloud:/var/www/html
+      - ./tweak.php:/usr/local/etc/php/conf.d/tweak.php
+    depends_on:
+      - db
+      - redis
+    labels:
+      caddy: "cloud.colman.com.br"
+      caddy.root: "* /var/www/html"
+      caddy.file_server:
+      caddy.php_fastcgi: "{{upstreams 9000}}"
+      caddy.0_redir: "/.well-known/carddav /remote.php/dav 301"
+      caddy.1_redir: "/.well-known/caldav remote.php/dav 301"
+      caddy.header: "Strict-Transport-Security max-age=15552000"
+
+  cron:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - app
+
+  collabora:
+    image: collabora/code
+    restart: always
+    networks:
+      - caddy
+    cap_add:
+      - MKNOD
+    env_file:
+      - collabora.env
+    labels:
+      caddy: office.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9980}}"
+
+
+volumes:
+  db:
+  nextcloud:
+    external: true
+
+networks:
+  caddy:
+    external: true

@@ -16,7 +16,9 @@ services:
     networks:
       - caddy
       - default
-    env_file: nextcloud.env
+    env_file:
+    - nextcloud.env
+    - db.env
     volumes:
       - nextcloud:/var/www/html
       - ./tweak.php:/usr/local/etc/php/conf.d/tweak.php

@@ -64,6 +64,7 @@ services:
       VOLUMERIZE_TARGET2: s3://s3.sa-east-1.amazonaws.com/colman-nextcloud-backup/db
       AWS_ACCESS_KEY_ID: foo
       AWS_SECRET_ACCESS_KEY: bar
+      PASSPHRASE: my-secret
 
 volumes:
   db:

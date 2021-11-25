@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  xmrig:
+    build: .
+    env_file: credentials.env
+    command: "--coin monero --url ${POOL_URL} --user ${USER} --pass ${PASSWORD}"

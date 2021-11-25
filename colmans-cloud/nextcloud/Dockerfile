@@ -14,3 +14,14 @@ RUN python3 -m pip install --upgrade Pillow
 RUN python3 -m pip install --upgrade numpy
 # FFMPEG
 RUN apk add ffmpeg
+
+
+# Face Recognition
+RUN apk add -X https://dl-cdn.alpinelinux.org/alpine/edge/testing dlib
+RUN wget https://github.com/goodspb/pdlib/archive/master.zip \
+  && mkdir -p /usr/src/php/ext/ \
+  && unzip -d /usr/src/php/ext/ master.zip \
+  && rm master.zip
+RUN docker-php-ext-install pdlib-master
+RUN apk add bzip2-dev
+RUN docker-php-ext-install bz2

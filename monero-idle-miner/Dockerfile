@@ -22,5 +22,4 @@ RUN apk add hwloc-dev
 RUN adduser -S -D -H -h /xmrig miner
 RUN xmrig --help
 USER miner
-ENTRYPOINT ["xmrig"]
-CMD [ "--help" ]
+CMD xmrig --coin monero --url $XMR_POOL_URL --user $XMR_POOL_USER --pass $XMR_POOL_PASSWORD

@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  searx:
+    image: searx/searx
+    command: -f
+    environment:
+      - BASE_URL=https://searx.colman.com.br/
+    expose:
+      - 8080
+    volumes:
+      - searx:/etc/searx:rw
+
+  filtron:
+    image: dalf/filtron
+    expose:
+      - 4040
+    command: -listen 0.0.0.0:4040 -target searx:8080
+    volumes:
+      - ./rules.json:/etc/filtron/rules.json:rw
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: searx.colman.com.br
+
+volumes:
+  searx:
+
+networks:
+  caddy:
+    external: true

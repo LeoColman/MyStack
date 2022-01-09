@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  librespeed:
+    image: lscr.io/linuxserver/librespeed
+    env_file: config.env
+    environment:
+      - TZ=EST
+    labels:
+      caddy: librespeed.colman.com.br

@@ -6,3 +6,9 @@ services:
     labels:
       caddy: "ward.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 4000}}"
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true

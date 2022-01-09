@@ -7,7 +7,7 @@ services:
       - TZ=EST
     labels:
       caddy: librespeed.colman.com.br
-      caddy.reverse_proxy: {{upstreams 80}}
+      caddy.reverse_proxy: "{{upstreams 80}}"
     networks:
       - caddy
 

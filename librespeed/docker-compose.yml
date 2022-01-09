@@ -5,7 +5,11 @@ services:
     env_file: config.env
     environment:
       - TZ=EST
-      - CUSTOM_RESULTS=true
+      - TITLE="Colman's Libre Speed"
+      - TELEMETRY=true
+      - ENABLE_ID_OBFUSCATION=true
+      - REDACT_IP_ADDRESSES=true
+      - EMAIL=privacy@colman.com.br
     labels:
       caddy: librespeed.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"

@@ -5,6 +5,7 @@ services:
     env_file: config.env
     environment:
       - TZ=EST
+      - CUSTOM_RESULTS=true
     labels:
       caddy: librespeed.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"

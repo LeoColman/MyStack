@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  ward:
+    build: ./Ward
+    labels:
+      caddy: "ward.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams 4000}}"

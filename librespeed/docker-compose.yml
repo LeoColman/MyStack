@@ -5,7 +5,7 @@ services:
     env_file: config.env
     environment:
       - TZ=EST
-      - TITLE="Colman's Libre Speed"
+      - TITLE=Colman's Libre Speed
       - TELEMETRY=true
       - ENABLE_ID_OBFUSCATION=true
       - REDACT_IP_ADDRESSES=true

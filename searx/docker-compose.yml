@@ -23,6 +23,7 @@ services:
       - caddy
     labels:
       caddy: searx.colman.com.br
+      caddy.reverse_proxy: {{upstreams 4040}}
 
 volumes:
   searx:

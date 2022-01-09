@@ -7,3 +7,9 @@ services:
       - TZ=EST
     labels:
       caddy: librespeed.colman.com.br
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true

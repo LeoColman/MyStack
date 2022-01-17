@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  homeassistant:
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./config/:/config
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - 8123
+    networks:
+      - caddy
+    labels:
+      caddy: homeassistant.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8123}}"
+
+networks:
+  caddy:
+    external: true

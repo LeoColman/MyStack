@@ -1,0 +1,5 @@
+http:
+  base_url: https://homeassistant.colman.com.br
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - caddy

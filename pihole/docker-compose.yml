@@ -7,6 +7,7 @@ services:
     ports:
       - "443:443/tcp"
       - "53:53/tcp"
+      - "67:67"
       - "53:53/udp"
       - "80:80/tcp"
     env_file: config.env
@@ -17,3 +18,5 @@ services:
     volumes:
       - ./etc_pihole-unbound:/etc/pihole:rw
       - ./etc_pihole_dnsmasq-unbound:/etc/dnsmasq.d:rw
+    cap_add:
+      - NET_ADMIN

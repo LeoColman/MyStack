@@ -13,7 +13,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data
-      - nextcloud:/var/www/html
+      - ../colmans-cloud/data/nextcloud:/var/www/html
+      - ../colmans-cloud/data/user_data:/var/user_data
+      - ../colmans-cloud/data/apps:/var/www/html/apps
+      - ../colmans-cloud/data/custom_apps:/var/www/html/custom_apps
     restart: unless-stopped
 
 networks:
@@ -22,5 +25,3 @@ networks:
 
 volumes:
   caddy_data:
-  nextcloud:
-    external: true

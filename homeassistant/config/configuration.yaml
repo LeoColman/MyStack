@@ -12,7 +12,6 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 http:
-  base_url: https://homeassistant.colman.com.br
   use_x_forwarded_for: true
   trusted_proxies:
    - 172.18.0.0/16

@@ -17,6 +17,8 @@ services:
   client:
     container_name: openvpn-client
     image: ghcr.io/wfg/openvpn-client
+    ports:
+      - "8123:8123"
     networks:
       - vpn
     cap_add:
@@ -26,6 +28,9 @@ services:
     volumes:
       - ./vpn:/data/vpn
       - ./openvpn-data/conf:/etc/openvpn
+    labels:
+      caddy: homeassistant.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8123}}"
 
 networks:
   vpn:

@@ -2,6 +2,8 @@ version: "3.7"
 
 services:
   openvpn:
+    networks:
+      - vpn
     cap_add:
       - NET_ADMIN
     image: kylemanna/openvpn

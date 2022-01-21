@@ -5,8 +5,9 @@ services:
     cap_add:
       - NET_ADMIN
     image: kylemanna/openvpn
+    container_name: openvpn
     ports:
       - "1194:1194/udp"
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./openvpn-data/conf:/etc/openvpn

@@ -1,13 +1,22 @@
 version: "3.7"
 
 services:
+  openvpn-client:
+    image: ghcr.io/wfg/openvpn-client
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./vpn:/data/vpn
+    restart: unless-stopped
   homeassistant:
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
       - ./config/:/config
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - 8123:8123
+      - "8123:8123"
     networks:
       - caddy
     labels:

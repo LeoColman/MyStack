@@ -2,14 +2,24 @@ version: "3.7"
 
 services:
   openvpn-client:
-    image: ghcr.io/wfg/openvpn-client
+    image: dperson/openvpn-client
+    # cap_add, security_opt, and volume required for the image to function
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun
-    volumes:
-      - ./vpn:/data/vpn
+    environment:
+      TZ: 'America/Sao_Paulo'
+    read_only: true
+    tmpfs:
+      - /run
+      - /tmp
     restart: unless-stopped
+    security_opt:
+      - label:disable
+    stdin_open: true
+    tty: true
+    volumes:
+      - /dev/net:/dev/net:z
+      - ./vpn:/vpn
   homeassistant:
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:

@@ -11,3 +11,7 @@ services:
     restart: always
     volumes:
       - ./openvpn-data/conf:/etc/openvpn
+
+networks:
+  vpn:
+    external: true

@@ -1,25 +1,6 @@
 version: "3.7"
 
 services:
-  openvpn-client:
-    image: dperson/openvpn-client
-    # cap_add, security_opt, and volume required for the image to function
-    cap_add:
-      - NET_ADMIN
-    environment:
-      TZ: 'America/Sao_Paulo'
-    read_only: true
-    tmpfs:
-      - /run
-      - /tmp
-    restart: unless-stopped
-    security_opt:
-      - label:disable
-    stdin_open: true
-    tty: true
-    volumes:
-      - /dev/net:/dev/net:z
-      - ./vpn:/vpn
   homeassistant:
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
@@ -29,10 +10,13 @@ services:
       - "8123:8123"
     networks:
       - caddy
+      - vpn
     labels:
       caddy: homeassistant.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8123}}"
 
 networks:
   caddy:
+    external: true
+  vpn:
     external: true

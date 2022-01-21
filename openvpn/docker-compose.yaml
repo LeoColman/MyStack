@@ -15,6 +15,7 @@ services:
     volumes:
       - ./openvpn-data/conf:/etc/openvpn
   client:
+    container_name: openvpn-client
     image: ghcr.io/wfg/openvpn-client
     networks:
       - vpn

@@ -10,8 +10,20 @@ services:
     container_name: openvpn
     ports:
       - "1194:1194/udp"
+      - "1195:1195/udp"
     restart: always
     volumes:
+      - ./openvpn-data/conf:/etc/openvpn
+  client:
+    image: ghcr.io/wfg/openvpn-client
+    networks:
+      - vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./vpn:/data/vpn
       - ./openvpn-data/conf:/etc/openvpn
 
 networks:

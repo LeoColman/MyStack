@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  dungeon-revealer:
+    image: dungeonrevealer/dungeon-revealer:latest
+    env_file: configuration.env
+    expose:
+      - 3000
+    volumes:
+      - ./data:/usr/src/app/data
+    labels:
+      caddy: dungeonrevealer.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true

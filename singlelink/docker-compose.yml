@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  postgres:
+    hostname: postgres
+    container_name: postgres
+    image: postgres
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+  singlelink:
+    build: dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"

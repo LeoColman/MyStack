@@ -1,4 +1,4 @@
 #!/bin/bash
 npm run build
-npm run db:migrate
+npm run no_dotenv_db:migrate
 npm run start

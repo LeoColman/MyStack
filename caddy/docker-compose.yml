@@ -12,7 +12,7 @@ services:
       - caddy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - caddy_data:/data
+      - ./caddy_data:/data
       - ../colmans-cloud/data/nextcloud:/var/www/html
       - ../colmans-cloud/data/user_data:/var/user_data
       - ../colmans-cloud/data/apps:/var/www/html/apps
@@ -22,6 +22,3 @@ services:
 networks:
   caddy:
     external: true
-
-volumes:
-  caddy_data:

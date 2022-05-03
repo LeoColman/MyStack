@@ -51,12 +51,16 @@ services:
     labels:
       caddy: collabora.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9980}}"
-    
+
   backup:
-    image: blacklabelops/volumerize
+    image: b3vis/borgmatic
     volumes:
-      - ./data:/source:ro
-    env_file: backup.env 
+      - ./data:/data:ro
+      - ./borgmatic:/etc/borgmatic.d/
+      - ./borgmatic/ssh:/root/.ssh:ro
+    environment:
+      BORG_PASSPHRASE: abcde
+
 
 networks:
   caddy:

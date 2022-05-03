@@ -1,6 +1,6 @@
 location:
   source_directories:
-    - /mnt/source
+    - /data
   repositories:
     - rb2z4bpb@rb2z4bpb.repo.borgbase.com:repo
   one_file_system: true

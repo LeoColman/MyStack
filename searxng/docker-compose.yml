@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  searxng:
+    image: searxng/searxng:latest
+    networks:
+      - caddy
+    environment:
+      SEARXNG_BASE_URL: "https://searxng.colman.com.br"
+    labels:
+      caddy: searxng.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+
+networks:
+  caddy:
+    external: true

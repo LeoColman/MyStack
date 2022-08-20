@@ -9,6 +9,7 @@ services:
       - MYSQL_DATABASE=wordpress
       - MYSQL_USER=wordpress
       - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
 
   wordpress:
     image: wordpress:latest

@@ -1,8 +1,0 @@
-version: '3.7'
-
-services:
-  xmrig:
-    build: .
-    env_file: credentials.env
-    cpu_shares: 512
-    cpus: 6

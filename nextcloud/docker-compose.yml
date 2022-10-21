@@ -1,0 +1,112 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10.5
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MARIADB_ROOT_PASSWORD
+    volumes:
+      - database:/var/lib/mysql
+  redis:
+    image: redis:alpine
+
+  nextcloud:
+    image: nextcloud:stable
+    networks:
+      - caddy
+      - default
+    environment:
+      - NEXTCLOUD_ADMIN_USER
+      - NEXTCLOUD_ADMIN_PASSWORD
+      - NEXTCLOUD_TRUSTED_DOMAINS
+      - SMTP_HOST
+      - SMTP_PORT
+      - SMTP_SECURE
+      - SMTP_AUTH_TYPE
+      - SMTP_NAME
+      - SMTP_PASSWORD
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MARIADB_ROOT_PASSWORD
+      - MAIL_FROM_ADDRESS=no-reply
+      - MAIL_DOMAIN=cloud.colman.com.br
+      - REDIS_HOST=redis
+      - MYSQL_HOST=mariadb
+      - TRUSTED_PROXIES=158.51.121.153
+    volumes:
+      - nextcloud:/var/www/html
+    depends_on:
+      - mariadb
+      - redis
+    labels:
+      caddy: "cloud.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams}}"
+      caddy.header: /*
+      caddy.header.Strict-Transport-Security: "max-age=15552000"
+      caddy.rewrite_0: /.well-known/carddav /remote.php/dav
+      caddy.rewrite_1: /.well-known/caldav /remote.php/dav
+
+
+  collabora:
+    image: collabora/code
+    restart: always
+    networks:
+      - caddy
+    cap_add:
+      - MKNOD
+    environment:
+      - username
+      - password
+      - dictionaries=en_GB en_US pt_BR
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true
+      - DONT_GEN_SSL_CERT=true
+      - domain=cloud.colman.com.br
+    labels:
+      caddy: collabora.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9980}}"
+
+  cron:
+    image: nextcloud:apache
+    volumes:
+      - nextcloud:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - mariadb
+      - redis
+
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - database:/data/database:ro
+      - nextcloud:/data/nextcloud:ro
+      - ssh:/root/.ssh/:ro
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-nextcloud
+        target: /etc/borgmatic.d/config.yaml
+      - source: borgmatic-crontab-nextcloud
+        target: /etc/borgmatic.d/crontab.txt
+
+configs:
+  borgmatic-config-nextcloud:
+    external: true
+  borgmatic-crontab-nextcloud:
+    external: true
+
+secrets:
+  borgmatic-ssh-nextcloud:
+    external: true
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  database:
+  nextcloud:
+  ssh:
+    external: true

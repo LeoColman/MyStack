@@ -16,7 +16,7 @@ services:
   nextcloud:
     image: nextcloud:stable
     networks:
-      - caddy
+      - reverse_proxy
       - default
     environment:
       - NEXTCLOUD_ADMIN_USER
@@ -54,7 +54,7 @@ services:
     image: collabora/code
     restart: always
     networks:
-      - caddy
+      - reverse_proxy
     cap_add:
       - MKNOD
     environment:
@@ -102,7 +102,7 @@ secrets:
     external: true
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true
 
 volumes:

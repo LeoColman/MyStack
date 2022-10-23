@@ -1,24 +1,35 @@
-version: "3.7"
+version: "3.8"
 
 services:
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    image: lucaslorentz/caddy-docker-proxy
     ports:
       - "80:80"
       - "443:443"
-    environment:
-      - CADDY_INGRESS_NETWORKS=caddy
     networks:
-      - caddy
+      - reverse_proxy
+    environment:
+      - CADDY_INGRESS_NETWORKS=reverse_proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./caddy_data:/data
-      - ../colmans-cloud/data/nextcloud:/var/www/html
-      - ../colmans-cloud/data/user_data:/var/user_data
-      - ../colmans-cloud/data/apps:/var/www/html/apps
-      - ../colmans-cloud/data/custom_apps:/var/www/html/custom_apps
-    restart: unless-stopped
+      - caddy_data:/data
+    deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
+      placement:
+        constraints:
+          - node.role == manager
+      replicas: 1
+      restart_policy:
+        condition: any
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: "200M"
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true
+
+volumes:
+  caddy_data: { }

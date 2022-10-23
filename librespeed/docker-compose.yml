@@ -2,7 +2,6 @@ version: "3.7"
 services:
   librespeed:
     image: adolfintel/speedtest
-    env_file: config.env
     environment:
       - TZ=EST
       - TITLE=Colman's Libre Speed
@@ -10,12 +9,13 @@ services:
       - ENABLE_ID_OBFUSCATION=true
       - REDACT_IP_ADDRESSES=true
       - EMAIL=privacy@colman.com.br
+      - PASSWORD
     labels:
       caddy: librespeed.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"
     networks:
-      - caddy
+      - reverse_proxy
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true

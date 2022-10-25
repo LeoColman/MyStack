@@ -4,7 +4,7 @@ services:
   searxng:
     image: searxng/searxng:latest
     networks:
-      - caddy
+      - reverse_proxy
     environment:
       SEARXNG_BASE_URL: "https://searxng.colman.com.br"
     labels:
@@ -13,5 +13,5 @@ services:
 
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true

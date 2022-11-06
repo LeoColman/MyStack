@@ -8,7 +8,7 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - openvpn-data/conf:/etc/openvpn
+      - openvpn-data:/etc/openvpn
     networks:
       - reverse_proxy
     labels:

@@ -16,7 +16,7 @@ services:
       - reverse_proxy
     labels:
       caddy: pihole.colman.com.br
-      caddy.reverse_proxy: "{{upstreams}}"
+      caddy.reverse_proxy: "{{upstreams 80}}"
 
 networks:
   reverse_proxy:

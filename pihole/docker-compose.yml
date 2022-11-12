@@ -12,3 +12,12 @@ services:
       - DNSSEC="true"
       - TZ=America/Montreal
       - WEBPASSWORD
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: pihole.colman.com.br
+      caddy.reverse_proxy: "{{upstreams}}"
+
+networks:
+  reverse_proxy:
+    external: true

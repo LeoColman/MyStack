@@ -19,10 +19,16 @@ services:
 
   front:
     image: dockertaiga/front:6
+    networks:
+      - default
+      - reverse_proxy
     volumes:
       - taiga-conf:/taiga-conf
     env_file:
       - variables.env
+    labels:
+      caddy: taiga.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 80}}"
 
   events:
     image: dockertaiga/events:6
@@ -43,22 +49,6 @@ services:
     env_file:
       - variables.env
 
-  proxy:
-    image: dockertaiga/proxy
-    depends_on:
-      - back
-      - front
-      - events
-    networks:
-      - default
-      - reverse_proxy
-    volumes:
-      - taiga-conf:/taiga-conf
-    env_file:
-      - variables.env
-    labels:
-      caddy: taiga.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 80}}"
 
 networks:
   reverse_proxy:

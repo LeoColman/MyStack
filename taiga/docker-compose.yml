@@ -1,0 +1,64 @@
+version: "3.8"
+
+volumes:
+  taiga-media:
+  taiga-conf:
+  database:
+
+services:
+  back:
+    image: dockertaiga/back:6
+    depends_on:
+      - db
+      - events
+    volumes:
+      - taiga-media:/taiga-media
+      - taiga-conf:/taiga-conf
+    env_file:
+      - variables.env
+
+  front:
+    image: dockertaiga/front:6
+    volumes:
+      - taiga-conf:/taiga-conf
+    env_file:
+      - variables.env
+
+  events:
+    image: dockertaiga/events:6
+    depends_on:
+      - rabbit
+    env_file:
+      - variables.env
+
+  db:
+    image: postgres:12-alpine
+    env_file:
+      - variables.env
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  rabbit:
+    image: dockertaiga/rabbit
+    env_file:
+      - variables.env
+
+  proxy:
+    image: dockertaiga/proxy
+    depends_on:
+      - back
+      - front
+      - events
+    networks:
+      - default
+      - reverse_proxy
+    volumes:
+      - taiga-conf:/taiga-conf
+    env_file:
+      - variables.env
+    labels:
+      caddy: taiga.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  default:

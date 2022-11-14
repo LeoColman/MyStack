@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  openproject:
+    image: openproject/community:12
+    networks:
+      - reverse_proxy
+    environment:
+      - OPEN_PROJECT_HOST__NAME=openproject.colman.com.br
+      - OPEN_PROJECT_SECRET_KEY_BASE
+    volumes:
+      - pgdata:/var/openproject/pgdata
+      - assets:/var/openproject/assets
+    labels:
+      caddy: openproject.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+networks:
+  reverse_proxy:

@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openproject:
-    image: openproject/community:12
+    image: peppershade/openproject-enterprise:12
     networks:
       - reverse_proxy
     environment:

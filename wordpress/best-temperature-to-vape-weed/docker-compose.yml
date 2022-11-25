@@ -24,13 +24,13 @@ services:
       - WORDPRESS_DB_PASSWORD
     networks:
       - default
-      - caddy
+      - reverse_proxy
     labels:
       caddy: best-temperature-to-vape-weed.com *.best-temperature-to-vape-weed.com
       caddy.reverse_proxy: "{{upstreams 80}}"
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true
 
 volumes:

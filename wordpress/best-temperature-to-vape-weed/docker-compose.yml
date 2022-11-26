@@ -17,6 +17,7 @@ services:
       - database
     volumes:
       - wordpress:/var/www/html
+      - php-config:/usr/local/etc/php/conf.d
     environment:
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_HOST=database
@@ -36,3 +37,4 @@ networks:
 volumes:
   database: {}
   wordpress: {}
+  php-config: {}

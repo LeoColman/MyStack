@@ -22,6 +22,7 @@ services:
       - postal-config:/config
     labels:
       caddy: "postal.colman.com.br, smtp.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams 5000}}"
 
   smtp:
     image: ghcr.io/postalserver/postal

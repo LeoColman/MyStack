@@ -3,17 +3,11 @@ version: "3.8"
 services:
   mariadb:
     image: mariadb
-    restart: always
-    expose:
-      - 3306
     environment:
       MARIADB_DATABASE: postal
       MARIADB_ROOT_PASSWORD: postal
   rabbit:
     image: rabbitmq:3.8
-    restart: always
-    expose:
-     - 5672
     environment:
       RABBITMQ_DEFAULT_USER: postal
       RABBITMQ_DEFAULT_PASS: postal
@@ -21,36 +15,36 @@ services:
   web:
     image: ghcr.io/postalserver/postal
     command: postal web-server
-    expose:
-      - 5000
     volumes:
-      - ./config:/config
+      - postal-config:/config
   smtp:
     image: ghcr.io/postalserver/postal
     command: postal smtp-server
-    expose:
-      - 25
+    ports:
+      - "25:25"
     cap_add:
       - NET_BIND_SERVICE
     volumes:
-      - ./config:/config
+      - postal-config:/config
   worker:
     image: ghcr.io/postalserver/postal
     command: postal worker
     volumes:
-      - ./config:/config
+      - postal-config:/config
   cron:
     image: ghcr.io/postalserver/postal
     command: postal cron
     volumes:
-      - ./config:/config
+      - postal-config:/config
   requeuer:
     image: ghcr.io/postalserver/postal
     command: postal requeuer
     volumes:
-      - ./config:/config
+      - postal-config:/config
 
+volumes:
+  postal-config: {}
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true

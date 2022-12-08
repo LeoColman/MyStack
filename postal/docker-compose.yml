@@ -15,8 +15,14 @@ services:
   web:
     image: ghcr.io/postalserver/postal
     command: postal web-server
+    networks:
+      - reverse_proxy
+      - default
     volumes:
       - postal-config:/config
+    labels:
+      caddy: "postal.colman.com.br, smtp.colman.com.br"
+
   smtp:
     image: ghcr.io/postalserver/postal
     command: postal smtp-server

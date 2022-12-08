@@ -53,6 +53,7 @@ services:
 
 volumes:
   postal-config: {}
+  database: {}
 
 networks:
   reverse_proxy:

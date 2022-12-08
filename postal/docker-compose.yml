@@ -6,6 +6,8 @@ services:
     environment:
       MARIADB_DATABASE: postal
       MARIADB_ROOT_PASSWORD: postal
+    volumes:
+      - database:/var/lib/mysql
   rabbit:
     image: rabbitmq:3.8
     environment:

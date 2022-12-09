@@ -32,7 +32,7 @@ services:
       - MYSQL_PASSWORD
       - MARIADB_ROOT_PASSWORD
       - MAIL_FROM_ADDRESS=no-reply
-      - MAIL_DOMAIN=cloud.colman.com.br
+      - MAIL_DOMAIN=colman.com.br
       - REDIS_HOST=redis
       - MYSQL_HOST=mariadb
       - TRUSTED_PROXIES=158.51.121.153

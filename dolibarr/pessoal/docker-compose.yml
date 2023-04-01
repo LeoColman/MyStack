@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - database:/data/database:ro
+      - dolibarr:/data/dolibarr:ro
+      - ssh:/root/.ssh/:ro
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-dolibarr-pessoal
+        target: /etc/borgmatic.d/config.yaml
+      - source: borgmatic-crontab-dolibarr-pessoal
+        target: /etc/borgmatic.d/crontab.txt
+
+  mariadb:
+    image: mariadb:10
+    environment:
+      - MARIADB_DATABASE=dolibarr
+      - MARIADB_ROOT_PASSWORD
+    volumes:
+      - database:/var/lib/mysql
+
+
+  web:
+    image: tuxgasy/dolibarr:17
+    depends_on:
+      - mariadb
+    environment:
+      - DOLI_DB_HOST=mariadb
+      - DOLI_DB_USER=root
+      - DOLI_DB_PASSWORD=root
+      - DOLI_DB_NAME=dolibarr
+      - DOLI_URL_ROOT=http://0.0.0.0
+      - PHP_INI_DATE_TIMEZONE=America/Sao_Paulo
+      - DOLI_ADMIN_LOGIN=admin
+      - DOLI_ADMIN_PASSWORD
+    volumes:
+      - dolibarr:/var/www/
+    networks:
+      - reverse_proxy
+      - default
+    labels:
+      caddy: dolibarr.colman.com.br
+      caddy.reverse_proxy: "{{upstreams}}"
+
+
+configs:
+  borgmatic-config-dolibarr-pessoal:
+    external: true
+  borgmatic-crontab-dolibarr-pessoal:
+    external: true
+
+volumes:
+  database: { }
+  dolibarr: { }
+
+networks:
+  reverse_proxy:
+    external: true

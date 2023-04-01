@@ -56,6 +56,8 @@ configs:
 volumes:
   database: { }
   dolibarr: { }
+  ssh:
+    external: true
 
 networks:
   reverse_proxy:

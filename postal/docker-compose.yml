@@ -15,7 +15,7 @@ services:
       RABBITMQ_DEFAULT_PASS: postal
       RABBITMQ_DEFAULT_VHOST: postal
   web:
-    image: ghcr.io/postalserver/postal
+    image: ghcr.io/postalserver/postal:2.1.2
     command: postal web-server
     networks:
       - reverse_proxy
@@ -27,7 +27,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 5000}}"
 
   smtp:
-    image: ghcr.io/postalserver/postal
+    image: ghcr.io/postalserver/postal:2.1.2
     command: postal smtp-server
     ports:
       - "25:25"
@@ -36,17 +36,17 @@ services:
     volumes:
       - postal-config:/config
   worker:
-    image: ghcr.io/postalserver/postal
+    image: ghcr.io/postalserver/postal:2.1.2
     command: postal worker
     volumes:
       - postal-config:/config
   cron:
-    image: ghcr.io/postalserver/postal
+    image: ghcr.io/postalserver/postal:2.1.2
     command: postal cron
     volumes:
       - postal-config:/config
   requeuer:
-    image: ghcr.io/postalserver/postal
+    image: ghcr.io/postalserver/postal:2.1.2
     command: postal requeuer
     volumes:
       - postal-config:/config

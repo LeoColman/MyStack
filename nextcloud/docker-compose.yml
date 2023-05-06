@@ -36,6 +36,7 @@ services:
       - REDIS_HOST=redis
       - MYSQL_HOST=mariadb
       - TRUSTED_PROXIES=158.51.121.153
+      - NC_default_phone_region=BR
     volumes:
       - nextcloud:/var/www/html
     depends_on:

@@ -38,10 +38,16 @@ services:
     environment:
       - BORG_PASSPHRASE
     configs:
-      - source: borgmatic-config-nextcloud
+      - source: borgmatic-config-wordpress
         target: /etc/borgmatic.d/config.yaml
-      - source: borgmatic-crontab-nextcloud
+      - source: borgmatic-crontab-wordpress
         target: /etc/borgmatic.d/crontab.txt
+
+configs:
+  borgmatic-config-wordpress:
+    external: true
+  borgmatic-crontab-wordpress:
+    external: true
 
 networks:
   reverse_proxy:

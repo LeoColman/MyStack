@@ -24,7 +24,7 @@ services:
       - WORDPRESS_DB_PASSWORD
     networks:
       - default
-      - caddy
+      - reverse_proxy
     labels:
       caddy: leonardo.colman.com.br *.leonardo.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"
@@ -44,7 +44,7 @@ services:
         target: /etc/borgmatic.d/crontab.txt
 
 networks:
-  caddy:
+  reverse_proxy:
     external: true
 
 volumes:

@@ -50,6 +50,8 @@ services:
       caddy.rewrite_0: /.well-known/carddav /remote.php/dav
       caddy.rewrite_1: /.well-known/caldav /remote.php/dav
 
+  localai:
+    image: quay.io/go-skynet/local-ai:latest
 
   collabora:
     image: collabora/code

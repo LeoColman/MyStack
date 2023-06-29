@@ -54,6 +54,7 @@ services:
     image: quay.io/go-skynet/local-ai:latest
     environment:
       - MODELS_PATH=/models
+      - GO_TAGS=stablediffusion
     volumes:
       - models:/models
 

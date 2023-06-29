@@ -14,7 +14,7 @@ services:
     image: redis:alpine
 
   nextcloud:
-    image: nextcloud:26
+    image: nextcloud:27
     networks:
       - reverse_proxy
       - default

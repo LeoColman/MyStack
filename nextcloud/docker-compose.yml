@@ -52,6 +52,7 @@ services:
 
   localai:
     image: quay.io/go-skynet/local-ai:latest
+    command: ["/usr/bin/local-ai"]
     environment:
       - MODELS_PATH=/models
       - GO_TAGS=stablediffusion

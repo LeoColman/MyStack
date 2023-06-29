@@ -52,6 +52,9 @@ services:
 
   localai:
     image: quay.io/go-skynet/local-ai:latest
+    environment:
+      - REBUILD=false
+      - MODELS_PATH=/models
     volumes:
       - models:/models
 

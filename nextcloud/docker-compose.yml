@@ -53,7 +53,7 @@ services:
   localai:
     image: quay.io/go-skynet/local-ai:latest
     volumes:
-      - models:/models:cached
+      - models:/models
 
   collabora:
     image: collabora/code

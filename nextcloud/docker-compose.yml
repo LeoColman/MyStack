@@ -57,6 +57,7 @@ services:
       - MODELS_PATH=/models
       - IMAGE_PATH=/tmp
       - GO_TAGS=stablediffusion
+      - THREADS=12
     volumes:
       - models:/models
 

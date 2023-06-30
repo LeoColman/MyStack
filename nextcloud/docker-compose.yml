@@ -55,6 +55,7 @@ services:
     command: ["/usr/bin/local-ai"]
     environment:
       - MODELS_PATH=/models
+      - IMAGE_PATH=/tmp
       - GO_TAGS=stablediffusion
     volumes:
       - models:/models

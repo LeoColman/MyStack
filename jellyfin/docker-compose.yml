@@ -12,7 +12,7 @@ services:
       - reverse_proxy
     labels:
       caddy: jellyfin.colman.com.br
-      caddy.reverse_proxy: "{{upstreams}}"
+      caddy.reverse_proxy: "{{upstreams 8096}}"
 
 
 networks:

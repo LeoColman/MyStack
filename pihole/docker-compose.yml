@@ -10,7 +10,7 @@ services:
       - DNS1=127.0.0.1#5335
       - DNS2=127.0.0.1#5335
       - DNSSEC="true"
-      - TZ=America/Montreal
+      - TZ=America/Sao_Paulo
       - WEBPASSWORD
     networks:
       - reverse_proxy

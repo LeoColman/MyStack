@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    volumes:
+      - config:/config
+      - cache:/cache
+      - media:/media
+    restart: "unless-stopped"
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: jellyfin.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8096}}"
+
+
+networks:
+  reverse_proxy:
+    external: true
+
+volumes:
+  config: { }
+  cache: { }
+  media: { }

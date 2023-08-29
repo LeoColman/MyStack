@@ -7,6 +7,8 @@ services:
       - media:/media
       - /root/.ssh/authorized_keys:/home/leonardo/.ssh/keys/authorized_keys
     command: leonardo::1001
+    ports:
+      - "2222:22"
     labels:
       caddy: sftp.jellyfin.colman.com.br
       caddy.reverse_proxy: "{{upstreams 22}}"

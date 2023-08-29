@@ -4,7 +4,7 @@ services:
   sftp:
     image: atmoz/sftp
     volumes:
-      - media:/media
+      - media:/home/leonardo/media
       - /root/.ssh/authorized_keys:/home/leonardo/.ssh/keys/authorized_keys
     command: "leonardo::::"
     ports:

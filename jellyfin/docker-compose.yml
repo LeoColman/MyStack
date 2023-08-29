@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  sftp:
+    image: atmoz/sftp
+    volumes:
+      - media:/media
+      - /root/.ssh/authorized_keys:/home/leonardo/.ssh/keys/authorized_keys
+    command: leonardo::1001
+    labels:
+      caddy: sftp.jellyfin.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 22}}"
+
   jellyfin:
     image: jellyfin/jellyfin
     volumes:

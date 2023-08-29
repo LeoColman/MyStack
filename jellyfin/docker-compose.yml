@@ -29,7 +29,7 @@ services:
 
 networks:
   reverse_proxy:
-#    external: true
+    external: true
 
 volumes:
   config: { }

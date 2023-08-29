@@ -6,7 +6,7 @@ services:
     volumes:
       - media:/media
       - /root/.ssh/authorized_keys:/home/leonardo/.ssh/keys/authorized_keys
-    command: "leonardo"
+    command: "leonardo::::"
     ports:
       - "2222:22"
     labels:
@@ -29,7 +29,7 @@ services:
 
 networks:
   reverse_proxy:
-    external: true
+#    external: true
 
 volumes:
   config: { }

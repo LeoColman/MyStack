@@ -13,12 +13,42 @@ services:
     labels:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
+    volumes:
+      - redmine:/usr/src/redmine
   db:
     image: mysql:5.7
+    volumes:
+      - database:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE=redmine
 
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - redmine:/data/redmine:ro
+      - database:/data/database:ro
+      - ssh:/root/.ssh/:ro
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-redmine
+        target: /etc/borgmatic.d/config.yaml
+      - source: borgmatic-crontab-redmine
+        target: /etc/borgmatic.d/crontab.txt
+
+configs:
+  borgmatic-config-redmine:
+    external: true
+  borgmatic-crontab-redmine:
+    external: true
+
 networks:
   reverse_proxy:
+    external: true
+
+volumes:
+  database: {}
+  redmine: {}
+  ssh:
     external: true

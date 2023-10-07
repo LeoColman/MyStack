@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   pihole:
-    image: cbcrowe/pihole-unbound:latest
+    image: cbcrowe/pihole-unbound:v5.8
     ports:
       - "53:53/tcp"
       - "53:53/udp"

@@ -35,7 +35,7 @@ services:
 
 
 volumes:
-  caddy-data:
+  caddy_data:
 
 networks:
   homebase:

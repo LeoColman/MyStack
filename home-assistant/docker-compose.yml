@@ -8,6 +8,9 @@ services:
       - /run/dbus:/run/dbus:ro`
     privileged: true
     network_mode: host
+    labels:
+      caddy: home.assistant
+      caddy.reverse_proxy: "{{upstreams 8123}}"
 
   mosquitto:
     image: eclipse-mosquitto
@@ -15,3 +18,7 @@ services:
 
 volumes:
   config: {}
+
+networks:
+  homebase:
+    external: true

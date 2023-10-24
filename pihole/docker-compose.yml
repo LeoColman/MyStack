@@ -29,7 +29,7 @@ services:
       - TZ=America/Sao_Paulo
       - WEBPASSWORD
     labels:
-      caddy: pi.hole
+      caddy: pi.hole.local
       caddy.reverse_proxy: "{{upstreams}}"
 
 

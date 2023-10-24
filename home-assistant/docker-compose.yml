@@ -9,7 +9,7 @@ services:
     privileged: true
     network_mode: host
     labels:
-      caddy: home.assistant
+      caddy: home.assistant.local
       caddy.reverse_proxy: "{{upstreams 8123}}"
 
   mosquitto:

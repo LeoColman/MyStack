@@ -8,11 +8,13 @@ services:
       - /run/dbus:/run/dbus:ro`
     privileged: true
     network_mode: host
+    restart: always
     labels:
       caddy: home.assistant.local
       caddy.reverse_proxy: "{{upstreams 8123}}"
 
   mosquitto:
+    restart: always
     image: eclipse-mosquitto
     network_mode: host
 

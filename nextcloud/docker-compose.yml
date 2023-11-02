@@ -39,7 +39,6 @@ services:
       - NC_default_phone_region=BR
     volumes:
       - nextcloud:/var/www/html
-      - storage-box:/mnt/storage-box
     depends_on:
       - mariadb
       - redis
@@ -107,8 +106,6 @@ networks:
     external: true
 
 volumes:
-  storage-box:
-    external: true
   database:
   nextcloud:
   ssh:

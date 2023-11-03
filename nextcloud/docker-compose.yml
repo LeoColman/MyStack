@@ -83,7 +83,7 @@ services:
     image: b3vis/borgmatic
     volumes:
       - database:/data/database:ro
-      - nextcloud:/data/nextcloud:ro
+      - nextcloud:/data/nextcloud
       - ssh:/root/.ssh/:ro
     environment:
       - BORG_PASSPHRASE

@@ -43,6 +43,8 @@ services:
     depends_on:
       - mariadb
       - redis
+    cap_add:
+      - SYS_ADMIN
     labels:
       caddy: "cloud.colman.com.br"
       caddy.reverse_proxy: "{{upstreams}}"

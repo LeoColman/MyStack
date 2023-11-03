@@ -39,7 +39,7 @@ services:
       - NC_default_phone_region=BR
     volumes:
       - nextcloud:/var/www/html
-      - /mnt/u373836.your-storagebox.de:/mnt/u373836.your-storagebox.de
+      - /mnt/storage-box:/mnt/storage-box
     depends_on:
       - mariadb
       - redis

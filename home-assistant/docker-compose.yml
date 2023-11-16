@@ -11,9 +11,14 @@ services:
     restart: always
 
   mosquitto:
-    restart: always
-    image: eclipse-mosquitto
-    network_mode: host
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+      - "8883:8883"
+      - "9001:9001"
+    volumes:
+      - mosquitto:/mosquitto/
 
 volumes:
   config: {}
+  mosquitto: {}

@@ -30,7 +30,7 @@ services:
     restart: always
     labels:
       caddy: "pi.hole.intranet"
-      caddy.tls: internal
+      caddy.tls: self_signed
       caddy.reverse_proxy: "{{upstreams}}"
 
 volumes:

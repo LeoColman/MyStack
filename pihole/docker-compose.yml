@@ -1,8 +1,23 @@
 version: "3.7"
 
 services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - homebase
+    environment:
+      - CADDY_INGRESS_NETWORKS=homebase
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+
   pihole:
     image: cbcrowe/pihole-unbound:v5.8
+    networks:
+      - homebase
     ports:
       - "53:53/tcp"
       - "53:53/udp"
@@ -14,3 +29,13 @@ services:
       - TZ=America/Sao_Paulo
       - WEBPASSWORD
     restart: always
+    labels:
+      caddy: "pi.hole.intranet"
+      caddy.reverse_proxy: "{{upstreams}}"
+
+volumes:
+  caddy_data:
+
+networks:
+  homebase:
+    external: true

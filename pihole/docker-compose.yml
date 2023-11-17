@@ -28,6 +28,9 @@ services:
       - DNSSEC="true"
       - TZ=America/Sao_Paulo
       - WEBPASSWORD
+    volumes:
+      - etc_pihole-unbound:/etc/pihole
+      - etc_pihole_dnsmasq-unbound:/etc/dnsmasq.d
     restart: always
     labels:
       caddy: "pi.hole.intranet"
@@ -36,6 +39,8 @@ services:
 
 volumes:
   caddy_data:
+  etc_pihole-unbound:
+  etc_pihole_dnsmasq-unbound:
 
 networks:
   homebase:

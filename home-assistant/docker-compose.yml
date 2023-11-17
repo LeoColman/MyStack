@@ -1,5 +1,7 @@
 version: "3"
+
 services:
+
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     volumes:
@@ -9,6 +11,13 @@ services:
     privileged: true
     network_mode: host
     restart: always
+    networks:
+      - homebase
+      - default
+    labels:
+      caddy: homeassistant.intranet, ha.intranet, fred.intranet
+      caddy.tls: internal
+      caddy.reverse_proxy: "{{upstreams 8123}}"
 
   mosquitto:
     image: eclipse-mosquitto:2
@@ -18,6 +27,10 @@ services:
       - "9001:9001"
     volumes:
       - mosquitto:/mosquitto/
+
+networks:
+  homebase:
+    external: true
 
 volumes:
   config: {}

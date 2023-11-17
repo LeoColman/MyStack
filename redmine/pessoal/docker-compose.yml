@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   redmine:
-    image: redmine:5.0.4
+    image: redmine:5.1.0
     environment:
       - REDMINE_DB_MYSQL=db
       - REDMINE_DB_PASSWORD

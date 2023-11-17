@@ -11,9 +11,6 @@ services:
     privileged: true
     network_mode: host
     restart: always
-    networks:
-      - homebase
-      - default
     labels:
       caddy: homeassistant.intranet, ha.intranet
       caddy.tls: internal
@@ -28,9 +25,6 @@ services:
     volumes:
       - mosquitto:/mosquitto/
 
-networks:
-  homebase:
-    external: true
 
 volumes:
   config: {}

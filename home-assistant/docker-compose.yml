@@ -15,7 +15,7 @@ services:
       - homebase
       - default
     labels:
-      caddy: homeassistant.intranet, ha.intranet, fred.intranet
+      caddy: homeassistant.intranet, ha.intranet
       caddy.tls: internal
       caddy.reverse_proxy: "{{upstreams 8123}}"
 

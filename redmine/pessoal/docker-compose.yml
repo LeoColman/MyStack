@@ -17,6 +17,7 @@ services:
       - redmine:/usr/src/redmine
   db:
     image: mysql:5.7
+    command: --skip-grant-tables
     volumes:
       - database:/var/lib/mysql
     environment:

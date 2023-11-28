@@ -3,6 +3,8 @@ version: "3.8"
 services:
   redmine:
     image: redmine:5.1.0
+    depends_on:
+      - db
     environment:
       - REDMINE_DB_MYSQL=db
       - REDMINE_DB_PASSWORD
@@ -14,7 +16,9 @@ services:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
     volumes:
-      - redmine:/usr/src/redmine
+      - attachments:/usr/src/redmine/files
+      - plugins:/usr/src/redmine/plugins
+
   db:
     image: mysql:5.7
     volumes:
@@ -26,8 +30,9 @@ services:
   backup:
     image: b3vis/borgmatic
     volumes:
-      - redmine:/data/redmine:ro
-      - database:/data/database:ro
+      - attachments:/data/attachments
+      - plugins:/data/plugins
+      - database:/data/database
       - ssh:/root/.ssh/:ro
     environment:
       - BORG_PASSPHRASE
@@ -49,6 +54,7 @@ networks:
 
 volumes:
   database: {}
-  redmine: {}
+  attachments: {}
+  plugins: {}
   ssh:
     external: true

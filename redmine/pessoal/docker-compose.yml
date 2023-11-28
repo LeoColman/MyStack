@@ -18,6 +18,7 @@ services:
     volumes:
       - attachments:/usr/src/redmine/files
       - plugins:/usr/src/redmine/plugins
+      - configuration:/usr/src/redmine/config
 
   db:
     image: mysql:5.7
@@ -33,6 +34,7 @@ services:
       - attachments:/data/attachments
       - plugins:/data/plugins
       - database:/data/database
+      - configuration:/data/configuration
       - ssh:/root/.ssh/:ro
     environment:
       - BORG_PASSPHRASE
@@ -55,6 +57,7 @@ networks:
 volumes:
   database: {}
   attachments: {}
+  configuration: {}
   plugins: {}
   ssh:
     external: true

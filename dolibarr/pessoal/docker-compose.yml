@@ -39,6 +39,7 @@ services:
       - DOLI_DB_PASSWORD
     volumes:
       - dolibarr:/var/www/
+      - doctemplates:/var/www/documents/doctemplates
     networks:
       - reverse_proxy
       - default
@@ -56,6 +57,7 @@ configs:
 volumes:
   database: { }
   dolibarr: { }
+  doctemplates : {}
   ssh:
     external: true
 

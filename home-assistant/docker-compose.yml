@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20231007163002-if00:/dev/ttyACM0
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     volumes:

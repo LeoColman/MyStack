@@ -4,6 +4,8 @@ services:
   zigbee2mqtt:
     image: koenkk/zigbee2mqtt
     restart: always
+    volumes:
+      - /run/udev:/run/udev:ro
     ports:
       - "8080:8080"
     devices:

@@ -20,7 +20,7 @@ services:
       - default
       - reverse_proxy
     labels:
-      caddy: v4.backend.jopiter.app
+      caddy: persephone.jopiter.app
       caddy.reverse_proxy: "{{upstreams 5000}}"
 
   backup:

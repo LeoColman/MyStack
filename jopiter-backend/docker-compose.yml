@@ -20,7 +20,7 @@ services:
       - default
       - reverse_proxy
     labels:
-      caddy: jopiter.colman.com.br, v4.backend.jopiter.app
+      caddy: v4.backend.jopiter.app
       caddy.reverse_proxy: "{{upstreams 5000}}"
 
   backup:

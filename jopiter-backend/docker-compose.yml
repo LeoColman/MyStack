@@ -16,6 +16,9 @@ services:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jopiter
+    networks:
+      - default
+      - reverse_proxy
     labels:
       caddy: jopiter.colman.com.br, backend.jopiter.app, v4.backend.jopiter.app
       caddy.reverse_proxy: "{{upstreams 5000}}"

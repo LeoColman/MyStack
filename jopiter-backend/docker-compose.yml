@@ -35,6 +35,8 @@ services:
 
 volumes:
   postgres-data:
+  ssh:
+    external: true
 
 configs:
   borgmatic-config-jopiter:

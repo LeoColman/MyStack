@@ -19,8 +19,7 @@ services:
       - /run/dbus:/run/dbus:ro`
     privileged: true
     restart: always
-    ports:
-      - "8123:8123"
+    network_mode: host
 
   mosquitto:
     image: eclipse-mosquitto:2

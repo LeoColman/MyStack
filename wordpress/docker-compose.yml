@@ -26,7 +26,7 @@ services:
       - default
       - reverse_proxy
     labels:
-      caddy: leonardo.colman.com.br *.leonardo.colman.com.br
+      caddy: leonardo.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"
 
   backup:

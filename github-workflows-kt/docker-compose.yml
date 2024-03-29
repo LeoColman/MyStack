@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  github-workflows-kts:
+    image: krzema12/github-workflows-kt-jit-binding-server:latest
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: github-workflows-kt.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+networks:
+  reverse_proxy:
+    external: true

@@ -6,7 +6,7 @@ services:
     networks:
       - reverse_proxy
     labels:
-      caddy: github-workflows-kt.colman.com.br
+      caddy: github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
 
 networks:

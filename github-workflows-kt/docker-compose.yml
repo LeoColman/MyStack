@@ -8,6 +8,8 @@ services:
     labels:
       caddy: github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    environment:
+      - GITHUB_TOKEN
 
 networks:
   reverse_proxy:

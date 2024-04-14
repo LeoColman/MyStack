@@ -15,6 +15,7 @@ services:
     image: amir20/dozzle:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - dozzle:/data
     networks:
       - reverse_proxy
     labels:
@@ -27,3 +28,6 @@ services:
 networks:
   reverse_proxy:
     external: true
+
+volumes:
+  dozzle: {}

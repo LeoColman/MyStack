@@ -11,6 +11,19 @@ services:
     environment:
       - GITHUB_TOKEN
 
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: logs.github-workflows-kt-bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    environment:
+      DOZZLE_AUTH_PROVIDER: simple
+
+
 networks:
   reverse_proxy:
     external: true

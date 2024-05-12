@@ -21,7 +21,7 @@ services:
       caddy: jaeger.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 16686}}"
       caddy.basicauth: "* bcrypt"
-      caddy.basicauth.admin: "$2a$12$wHSKILn9rUCpt.RgH7wowOnoejH7ajI2/Fd6r99.WCcdO7GISdbjO"
+      caddy.basicauth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
   dozzle:
     image: amir20/dozzle:latest

@@ -13,6 +13,14 @@ services:
     environment:
       - GITHUB_TOKEN
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: jaeger.github-workflows-kt-bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 16686}}"
+
   dozzle:
     image: amir20/dozzle:latest
     volumes:

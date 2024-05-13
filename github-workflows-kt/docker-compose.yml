@@ -5,6 +5,11 @@ services:
     image: krzema12/github-workflows-kt-jit-binding-server:latest
     deploy:
       replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+
     networks:
       - reverse_proxy
     labels:

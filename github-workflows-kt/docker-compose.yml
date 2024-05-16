@@ -9,6 +9,11 @@ services:
         parallelism: 1
         delay: 10s
         order: start-first
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080 || exit 1" ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
 
     networks:
       - reverse_proxy

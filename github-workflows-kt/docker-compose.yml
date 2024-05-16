@@ -10,8 +10,8 @@ services:
         delay: 10s
         order: start-first
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080 || exit 1" ]
-      interval: 1m
+      test: [ "CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' -L http://localhost:8080 | grep -q 404" ]
+      interval: 1m30s
       timeout: 10s
       retries: 3
 

@@ -1,14 +1,11 @@
 version: "3.7"
 services:
   librespeed:
-    image: adolfintel/speedtest
+    image: ghcr.io/librespeed/speedtest:latest
     environment:
-      - TZ=EST
+      - MODE=standalone
+      - TZ=America/Sao_Paulo
       - TITLE=Colman's Libre Speed
-      - TELEMETRY=true
-      - ENABLE_ID_OBFUSCATION=true
-      - REDACT_IP_ADDRESSES=true
-      - EMAIL=privacy@colman.com.br
       - PASSWORD
     labels:
       caddy: librespeed.colman.com.br

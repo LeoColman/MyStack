@@ -28,7 +28,7 @@ services:
     networks:
       - reverse_proxy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:16686 || exit 1" ]
+      test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -59,4 +59,4 @@ networks:
     external: true
 
 volumes:
-  dozzle: {}
+  dozzle: { }

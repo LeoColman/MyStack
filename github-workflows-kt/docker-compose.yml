@@ -3,12 +3,6 @@ version: "3.8"
 services:
   github-workflows-kts:
     image: krzema12/github-workflows-kt-jit-binding-server:latest
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-        order: start-first
     healthcheck:
       test: [ "CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' -L http://localhost:8080/status | grep -q 200" ]
       interval: 30s

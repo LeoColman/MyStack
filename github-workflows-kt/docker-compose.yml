@@ -32,6 +32,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 16686}}"
       caddy.basic_auth: "* bcrypt"
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
+      dozzle: true
 
   dozzle:
     image: amir20/dozzle:latest
@@ -45,7 +46,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       DOZZLE_AUTH_PROVIDER: simple
-      DOZZLE_FILTER: label=caddy=bindings.krzeminski.it,github-workflows-kt-bindings.colman.com.br
+      DOZZLE_FILTER: label=dozzle=true
 
 
 networks:

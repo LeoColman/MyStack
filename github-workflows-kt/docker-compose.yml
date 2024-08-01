@@ -14,7 +14,7 @@ services:
     labels:
       caddy: bindings.krzeminski.it,github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
-      dozzle: true
+      dozzle: yes
 
     environment:
       - GITHUB_TOKEN
@@ -47,7 +47,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       DOZZLE_AUTH_PROVIDER: simple
-      DOZZLE_FILTER: label=dozzle=true
+      DOZZLE_FILTER: label=dozzle=yes
 
 
 networks:

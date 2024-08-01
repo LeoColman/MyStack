@@ -12,7 +12,7 @@ services:
     networks:
       - reverse_proxy
     labels:
-      caddy: bindings.krzeminski.it,github-workflows-kt-bindings.colman.com.br
+      caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
       dozzle: "yes"
 

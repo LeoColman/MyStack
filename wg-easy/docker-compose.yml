@@ -51,3 +51,5 @@ services:
     labels:
       caddy: wireguard.colman.com.br
       caddy.reverse_proxy: "{{upstreams 51821}}"
+    networks:
+      - reverse_proxy

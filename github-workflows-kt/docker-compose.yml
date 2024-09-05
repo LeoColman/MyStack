@@ -35,6 +35,8 @@ services:
       caddy.basic_auth: "* bcrypt"
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
     environment:
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL="prometheus:9090"
       - COLLECTOR_ZIPKIN_HTTP_PORT=9411
       - PROMETHEUS_METRICS_HTTP_PORT=14269 # Prometheus scraping endpoint for metrics
 

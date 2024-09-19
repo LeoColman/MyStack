@@ -34,12 +34,6 @@ services:
       caddy.reverse_proxy: "{{upstreams 16686}}"
       caddy.basic_auth: "* bcrypt"
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
-    environment:
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
-      - PROMETHEUS_METRICS_HTTP_PORT=14269 # Prometheus scraping endpoint for metrics
-
 
   dozzle:
     image: amir20/dozzle:latest
@@ -54,27 +48,6 @@ services:
     environment:
       DOZZLE_AUTH_PROVIDER: simple
       DOZZLE_FILTER: label=dozzle=yes
-
-  prometheus:
-    image: prom/prometheus:latest
-    networks:
-      - reverse_proxy
-    labels:
-      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9090}}"
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        echo "
-        global:
-          scrape_interval: 15s
-        scrape_configs:
-          - job_name: 'jaeger'
-            static_configs:
-              - targets: ['jaeger:14269']
-        " > /etc/prometheus/prometheus.yml && \
-        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 
 
 networks:

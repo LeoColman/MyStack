@@ -22,7 +22,10 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     networks:
-      - reverse_proxy
+      reverse_proxy:
+        # An abstract host name, used by the application. Allows abstracting
+        # out what component is the receiver of traces.
+        aliases: [traces_collector]
     healthcheck:
       test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s

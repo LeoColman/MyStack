@@ -100,7 +100,7 @@ networks:
 configs:
   otel_config:
     file: inline
-    content: |
+    data: |
       receivers:
         otlp:
           protocols:

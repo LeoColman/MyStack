@@ -8,14 +8,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
+    depends_on:
+      - otel_collector
     networks:
       - reverse_proxy
     labels:
       caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
       dozzle: "yes"
-
     environment:
       - GITHUB_TOKEN
 
@@ -32,11 +32,89 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    environment:
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
+      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
+      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
+      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
     labels:
       caddy: jaeger.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 16686}}"
       caddy.basic_auth: "* bcrypt"
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
+
+  otel_collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    depends_on:
+      - jaeger
+    networks:
+      reverse_proxy:
+        aliases: [traces_collector]
+    ports:
+      - "8889:8889"
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        echo '
+        receivers:
+          otlp:
+            protocols:
+              grpc:
+                endpoint: "0.0.0.0:4317"
+
+        exporters:
+          prometheus:
+            endpoint: "0.0.0.0:8889"
+
+          otlp:
+            endpoint: jaeger:4317
+            tls:
+              insecure: true
+
+        connectors:
+          spanmetrics:
+
+        processors:
+          batch:
+
+        service:
+          pipelines:
+            traces:
+              receivers: [otlp]
+              processors: [batch]
+              exporters: [spanmetrics, otlp]
+
+            metrics/spanmetrics:
+              receivers: [spanmetrics]
+              exporters: [prometheus]
+        ' > /etc/otelcol/config.yml && \
+        /otelcol --config /etc/otelcol/config.yml
+
+  prometheus:
+    image: prom/prometheus:latest
+    networks:
+      - reverse_proxy
+    labels:
+      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9090}}"
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        echo "
+        global:
+          scrape_interval:     15s
+          evaluation_interval: 15s
+
+        scrape_configs:
+          - job_name: 'aggregated-trace-metrics'
+            static_configs:
+              - targets: ['traces_collector:8889']
+        " > /etc/prometheus/prometheus.yml && \
+        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 
   dozzle:
     image: amir20/dozzle:latest
@@ -52,10 +130,9 @@ services:
       DOZZLE_AUTH_PROVIDER: simple
       DOZZLE_FILTER: label=dozzle=yes
 
-
 networks:
   reverse_proxy:
     external: true
 
 volumes:
-  dozzle: { }
+  dozzle: {}

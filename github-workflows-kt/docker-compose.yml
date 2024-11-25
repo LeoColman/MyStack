@@ -46,52 +46,15 @@ services:
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
   otel_collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-
     depends_on:
       - jaeger
     networks:
       reverse_proxy:
         aliases: [traces_collector]
-    ports:
-      - "8889:8889"
-    entrypoint:
-      - /bin/bash
-      - -c
-      - |
-        echo '
-        receivers:
-          otlp:
-            protocols:
-              grpc:
-                endpoint: "0.0.0.0:4317"
-
-        exporters:
-          prometheus:
-            endpoint: "0.0.0.0:8889"
-
-          otlp:
-            endpoint: jaeger:4317
-            tls:
-              insecure: true
-
-        connectors:
-          spanmetrics:
-
-        processors:
-          batch:
-
-        service:
-          pipelines:
-            traces:
-              receivers: [otlp]
-              processors: [batch]
-              exporters: [spanmetrics, otlp]
-
-            metrics/spanmetrics:
-              receivers: [spanmetrics]
-              exporters: [prometheus]
-        ' > /etc/otelcol/config.yml && \
-        /otelcol --config /etc/otelcol/config.yml
+    configs:
+      - source: otel_config
+        target: /etc/otelcol/config.yaml
 
   prometheus:
     image: prom/prometheus:latest
@@ -133,6 +96,44 @@ services:
 networks:
   reverse_proxy:
     external: true
+
+configs:
+  otel_config:
+    file: inline
+    content: |
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: "0.0.0.0:4317"
+
+      exporters:
+        prometheus:
+          endpoint: "0.0.0.0:8889"
+
+        otlp:
+          endpoint: jaeger:4317
+          tls:
+            insecure: true
+
+      connectors:
+        spanmetrics:
+
+      processors:
+        batch:
+
+      service:
+        pipelines:
+          traces:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [spanmetrics, otlp]
+
+          metrics/spanmetrics:
+            receivers: [spanmetrics]
+            exporters: [prometheus]
+
+
 
 volumes:
   dozzle: {}

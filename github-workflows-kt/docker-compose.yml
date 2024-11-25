@@ -55,7 +55,7 @@ services:
     ports:
       - "8889:8889"
     entrypoint:
-      - /bin/sh
+      - /bin/bash
       - -c
       - |
         echo '

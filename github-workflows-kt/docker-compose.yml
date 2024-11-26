@@ -23,7 +23,7 @@ services:
     image: jaegertracing/all-in-one:latest
     networks:
       reverse_proxy:
-        - aliases: ["jaeger", "traces_collector"]
+        aliases: ["jaeger", "traces_collector"]
     healthcheck:
       test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s

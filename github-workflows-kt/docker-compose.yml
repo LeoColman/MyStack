@@ -10,6 +10,7 @@ services:
       retries: 3
     depends_on:
       - otel_collector
+      - jaeger
     networks:
       - reverse_proxy
     labels:
@@ -22,8 +23,7 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     networks:
-      reverse_proxy:
-        aliases: ["jaeger", "traces_collector"]
+      - reverse_proxy
     healthcheck:
       test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s
@@ -48,7 +48,9 @@ services:
     depends_on:
       - jaeger
     networks:
-      - reverse_proxy
+      reverse_proxy:
+        aliases: ["otel_collector", "traces_collector"]
+          
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml

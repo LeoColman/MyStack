@@ -46,12 +46,12 @@ services:
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
   otel_collector:
-    image: otel/opentelemetry-
+    image: otel/opentelemetry-collector-contrib:latest
     depends_on:
       - jaeger
     networks:
       reverse_proxy:
-        aliases: [traces_collector]
+        aliases: [otel_collector]
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml
@@ -75,7 +75,7 @@ services:
         scrape_configs:
           - job_name: 'aggregated-trace-metrics'
             static_configs:
-              - targets: ['traces_collector:8889']
+              - targets: ['traces_collector:8889', 'otel_collector:8889']
         " > /etc/prometheus/prometheus.yml && \
         /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 

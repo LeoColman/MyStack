@@ -48,9 +48,7 @@ services:
     depends_on:
       - jaeger
     networks:
-      reverse_proxy:
-        aliases: ["otel_collector", "traces_collector"]
-          
+      - reverse_proxy    
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml
@@ -74,7 +72,7 @@ services:
         scrape_configs:
           - job_name: 'aggregated-trace-metrics'
             static_configs:
-              - targets: ['jaeger:8889', 'otel_collector:8889']
+              - targets: ['otel_collector:8889']
         " > /etc/prometheus/prometheus.yml && \
         /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 

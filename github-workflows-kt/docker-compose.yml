@@ -47,6 +47,8 @@ services:
     image: otel/opentelemetry-collector-contrib:latest
     depends_on:
       - jaeger
+    expose: 
+      - 8889
     networks:
       reverse_proxy:
         aliases: [traces_collector]

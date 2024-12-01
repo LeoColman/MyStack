@@ -45,10 +45,9 @@ services:
 
   otel_collector:
     image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otelcol/config.yaml"]
     depends_on:
       - jaeger
-    expose: 
-      - 8889
     networks:
       reverse_proxy:
         aliases: [traces_collector]

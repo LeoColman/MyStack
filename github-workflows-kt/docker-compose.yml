@@ -49,7 +49,7 @@ services:
       - jaeger
     networks:
       reverse_proxy:
-        - aliases: ["traces_collector"]
+        aliases: [traces_collector]
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml

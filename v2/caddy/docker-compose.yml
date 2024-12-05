@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
+      placement:
+        constraints:
+          - node.role == manager
+      replicas: 1
+      restart_policy:
+        condition: any
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: "200M"
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  caddy_data: { }

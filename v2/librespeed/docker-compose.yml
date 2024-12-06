@@ -12,6 +12,12 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     networks:
       - caddy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "https://librespeed.ritalee.colman.com.br" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
   caddy:

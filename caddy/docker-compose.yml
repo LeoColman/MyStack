@@ -26,12 +26,6 @@ services:
         reservations:
           cpus: "0.1"
           memory: "200M"
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://caddy:80 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
 networks:
   reverse_proxy:

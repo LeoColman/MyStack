@@ -27,7 +27,7 @@ services:
           cpus: "0.1"
           memory: "200M"
     healthcheck:
-      test: [ "CMD", "wget", "-q", "-O-", "http://localhost:2019/metrics" ]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:80 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

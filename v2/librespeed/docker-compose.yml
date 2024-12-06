@@ -9,7 +9,7 @@ services:
       - PASSWORD
     labels:
       caddy: librespeed.ritalee.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     networks:
       - caddy
 

@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  searxng:
+    image: searxng/searxng:latest
+    networks:
+      - caddy
+    environment:
+      SEARXNG_BASE_URL: "https://searxng.ritalee.colman.com.br"
+    labels:
+      caddy: searx.ritalee.colman.com.br, searxng.colman.com.br, searx.colman.com.br, search.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+
+networks:
+  caddy:
+    external: true

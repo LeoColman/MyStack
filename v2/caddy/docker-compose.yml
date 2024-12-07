@@ -11,11 +11,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data
+    labels:
+      caddy: ritalee.colman.com.br
+      caddy.reverse_proxy: "http://portainer:9000"
     deploy:
-      labels:
-        caddy.email: caddy@colman.com.br
-        caddy: ritalee.colman.com.br
-        caddy.reverse_proxy: "http://portainer:9000"
       placement:
         constraints:
           - node.role == manager

@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  database:
+    image: mariadb:10
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USER=wordpress
+      - MARIADB_PASSWORD
+      - MARIADB_ROOT_PASSWORD
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+
+  wordpress:
+    image: wordpress:6
+    depends_on:
+      - database
+    volumes:
+      - wordpress:/var/www/html
+    environment:
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_HOST=database
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_PASSWORD
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: leonardo.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 80}}"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
+
+  borgmatic:
+    image: b3vis/borgmatic
+    volumes:
+      - database:/data/database
+      - wordpress:/data/wordpress
+      - ssh:/root/.ssh/
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-wordpress
+        target: /etc/borgmatic.d/config.yaml
+
+configs:
+  borgmatic-config-wordpress:
+    external: true
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  database: {}
+  wordpress: {}
+  ssh:
+    external: true

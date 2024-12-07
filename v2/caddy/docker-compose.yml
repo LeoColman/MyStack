@@ -13,7 +13,7 @@ services:
       - caddy_data:/data
     labels:
       caddy: ritalee.colman.com.br
-      caddy.reverse_proxy: "https://portainer:9000"
+      caddy.reverse_proxy: "https://localhost:9443"
     deploy:
       placement:
         constraints:

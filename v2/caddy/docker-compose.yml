@@ -11,10 +11,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data
-    labels:
-      caddy: ritalee.colman.com.br
-      caddy.reverse_proxy: "https://localhost:9443"
     deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
       placement:
         constraints:
           - node.role == manager

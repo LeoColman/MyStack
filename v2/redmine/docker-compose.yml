@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  redmine:
+    image: redmine:6-alpine
+    depends_on:
+      - database
+    environment:
+      - REDMINE_DB_MYSQL=db
+      - REDMINE_DB_PASSWORD
+      - REDMINE_SECRET_KEY_BASE
+    networks:
+      - caddy
+      - default
+    labels:
+      caddy: redmine.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    volumes:
+      - redmine:/usr/src/redmine
+
+  database:
+    image: mysql:8
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=redmine
+
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - database:/data/database
+      - redmine:/data/redmine
+      - ssh:/root/.ssh/
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-redmine
+        target: /etc/borgmatic.d/config.yaml
+
+configs:
+  borgmatic-config-redmine:
+    external: true
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  redmine: {}
+  database: {}
+  ssh:
+    external: true

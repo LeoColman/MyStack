@@ -26,6 +26,8 @@ services:
         reservations:
           cpus: "0.1"
           memory: "200M"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80/health" ]
 
 networks:
   reverse_proxy:

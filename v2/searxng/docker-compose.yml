@@ -11,7 +11,7 @@ services:
       caddy: searxng.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8080/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://searxng:8080/healthz"]
 networks:
   caddy:
     external: true

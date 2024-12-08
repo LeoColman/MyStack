@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "jopiter"
+      POSTGRES_DB: "jopiter"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U jopiter" ]
+      
+  jopiter:
+    image: jopiterapp/jopiter-backend:latest
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jopiter
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: persephone.jopiter.app
+      caddy.reverse_proxy: "{{upstreams 5000}}"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
+
+  borgmatic:
+    image: b3vis/borgmatic
+    volumes:
+      - postgres-data:/data/database
+      - ssh:/root/.ssh/
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-jopiter
+        target: /etc/borgmatic.d/config.yaml
+
+volumes:
+  postgres-data:
+  ssh:
+    external: true
+
+configs:
+  borgmatic-config-jopiter:
+    external: true
+
+networks:
+  default:
+  caddy:
+    external: true

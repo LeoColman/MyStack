@@ -25,8 +25,7 @@ services:
           cpus: "0.1"
           memory: "200M"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:80/health" ]
-
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:80 || exit 1"]
 networks:
   caddy:
     external: true

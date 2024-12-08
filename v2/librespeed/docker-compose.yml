@@ -8,16 +8,12 @@ services:
       - TITLE=Colman's Libre Speed
       - PASSWORD
     labels:
-      caddy: librespeed.ritalee.colman.com.br
+      caddy: librespeed.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
     networks:
       - caddy
     healthcheck:
-      test: [ "CMD", "curl", "-f", "https://librespeed.ritalee.colman.com.br" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
 
 networks:
   caddy:

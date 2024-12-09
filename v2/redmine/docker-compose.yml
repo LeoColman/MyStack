@@ -6,7 +6,7 @@ services:
     depends_on:
       - database
     environment:
-      - REDMINE_DB_MYSQL=db
+      - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD
       - REDMINE_SECRET_KEY_BASE
     networks:

@@ -12,7 +12,7 @@ services:
       - otel_collector
       - jaeger
     networks:
-      - reverse_proxy
+      - caddy
     labels:
       caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -23,7 +23,7 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     networks:
-      - reverse_proxy
+      - caddy
     healthcheck:
       test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s
@@ -49,8 +49,8 @@ services:
     depends_on:
       - jaeger
     networks:
-      reverse_proxy:
-        aliases: [traces_collector]
+      caddy:
+        aliases: [ traces_collector ]
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml
@@ -58,7 +58,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     networks:
-      - reverse_proxy
+      - caddy
     labels:
       caddy: prometheus.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9090}}"
@@ -84,7 +84,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - dozzle:/data
     networks:
-      - reverse_proxy
+      - caddy
     labels:
       caddy: logs.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -93,7 +93,7 @@ services:
       DOZZLE_FILTER: label=dozzle=yes
 
 networks:
-  reverse_proxy:
+  caddy:
     external: true
 
 configs:

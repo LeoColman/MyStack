@@ -28,7 +28,7 @@ services:
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE=db
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
 
   backup:
     image: b3vis/borgmatic

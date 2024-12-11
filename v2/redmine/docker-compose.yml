@@ -38,7 +38,7 @@ services:
       - ssh:/root/.ssh/
     environment:
       - BORG_PASSPHRASE
-      - BACKUP_CRON="#" # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
     configs:
       - source: borgmatic-config-redmine
         target: /etc/borgmatic.d/config.yaml

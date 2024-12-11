@@ -28,12 +28,13 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
 
   borgmatic:
-    image: b3vis/borgmatic:1.9.4
+    image: b3vis/borgmatic
     volumes:
       - postgres-data:/data/database
       - ssh:/root/.ssh/
     environment:
       - BORG_PASSPHRASE
+      - BACKUP_CRON="" # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
     configs:
       - source: borgmatic-config-jopiter
         target: /etc/borgmatic.d/config.yaml

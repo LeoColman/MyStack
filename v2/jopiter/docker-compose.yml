@@ -28,7 +28,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
 
   borgmatic:
-    image: b3vis/borgmatic
+    image: b3vis/borgmatic:1.9.4
     volumes:
       - postgres-data:/data/database
       - ssh:/root/.ssh/

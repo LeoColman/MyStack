@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb
+    environment:
+      MARIADB_DATABASE: postal
+      MARIADB_ROOT_PASSWORD: postal
+    volumes:
+      - database:/var/lib/mysql
+  web:
+    image: ghcr.io/postalserver/postal
+    command: postal web-server
+    networks:
+      - reverse_proxy
+      - default
+    volumes:
+      - postal-config:/config
+    labels:
+      caddy: "postal.colman.com.br, smtp.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams 5000}}"
+
+  smtp:
+    image: ghcr.io/postalserver/postal
+    command: postal smtp-server
+    ports:
+      - "25:25"
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - postal-config:/config
+        
+        
+  worker:
+    image: ghcr.io/postalserver/postal
+    command: postal worker
+    volumes:
+      - postal-config:/config
+
+volumes:
+  postal-config: {}
+  database: {}
+
+networks:
+  reverse_proxy:
+    external: true

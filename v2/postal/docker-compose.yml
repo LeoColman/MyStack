@@ -21,6 +21,8 @@ services:
     image: mariadb
     environment:
       MARIADB_DATABASE: postal
+      MARIADB_USER: postal
+      MARIADB_PASSWORD: postal
       MARIADB_ROOT_PASSWORD: postal
     volumes:
       - database:/var/lib/mysql

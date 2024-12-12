@@ -12,7 +12,7 @@ services:
     image: ghcr.io/postalserver/postal
     command: postal web-server
     networks:
-      - reverse_proxy
+      - caddy
       - default
     volumes:
       - postal-config:/config
@@ -42,5 +42,5 @@ volumes:
   database: {}
 
 networks:
-  reverse_proxy:
+  caddy:
     external: true

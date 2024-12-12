@@ -17,7 +17,7 @@ services:
     volumes:
       - postal-config:/config
     labels:
-      caddy: "postal.colman.com.br, smtp.colman.com.br"
+      caddy: "postal.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 5000}}"
 
   smtp:

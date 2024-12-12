@@ -8,7 +8,7 @@ x-environment: &postal
   MAIN_DB_PASSWORD: postal
   MESSAGE_DB_HOST: mariadb
   MESSAGE_DB_PASSWORD: postal
-  DNS_MX_RECORDS: ["mx1.postal.colman.com.br", "mx2.postal.colman.com.br"]
+  DNS_MX_RECORDS: "mx1.postal.colman.com.br, mx2.postal.colman.com.br"
   DNS_SPF_INCLUDE: "spf.postal.colman.com.br"
   DNS_RETURN_PATH_DOMAIN: "rp.postal.colman.com.br"
   DNS_ROUTE_DOMAIN: "routes.postal.colman.com.br"

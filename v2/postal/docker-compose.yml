@@ -1,5 +1,21 @@
 version: "3.8"
 
+x-environment: &postal
+  POSTAL_WEB_HOSTNAME: postal.colman.com.br
+  POSTAL_SMTP_HOSTNAME: postal.colman.com.br
+  MAIN_DB_HOST: mariadb
+  MAIN_DB_USERNAME: postal
+  MAIN_DB_PASSWORD: postal
+  MESSAGE_DB_HOST: mariadb
+  MESSAGE_DB_PASSWORD: postal
+  DNS_MX_RECORDS: ["mx1.postal.colman.com.br", "mx2.postal.colman.com.br"]
+  DNS_SPF_INCLUDE: "spf.postal.colman.com.br"
+  DNS_RETURN_PATH_DOMAIN: "rp.postal.colman.com.br"
+  DNS_ROUTE_DOMAIN: "routes.postal.colman.com.br"
+  DNS_TRACK_DOMAIN: "track.postal.colman.com.br"
+  SMTP_FROM_ADDRESS: "postal@colman.com.br"
+  
+
 services:
   mariadb:
     image: mariadb
@@ -8,9 +24,12 @@ services:
       MARIADB_ROOT_PASSWORD: postal
     volumes:
       - database:/var/lib/mysql
+  
   web:
     image: ghcr.io/postalserver/postal
     command: postal web-server
+    environment:
+      <<: *postal
     networks:
       - caddy
       - default
@@ -23,24 +42,29 @@ services:
   smtp:
     image: ghcr.io/postalserver/postal
     command: postal smtp-server
+    environment:
+      <<: *postal
     ports:
       - "25:25"
     cap_add:
       - NET_BIND_SERVICE
     volumes:
       - postal-config:/config
-        
-        
+  
+  
   worker:
     image: ghcr.io/postalserver/postal
     command: postal worker
+    environment:
+      <<: *postal
     volumes:
       - postal-config:/config
 
 volumes:
-  postal-config: {}
-  database: {}
+  postal-config: { }
+  database: { }
 
 networks:
   caddy:
     external: true
+    

@@ -14,6 +14,7 @@ x-environment: &postal
   DNS_ROUTE_DOMAIN: "routes.postal.colman.com.br"
   DNS_TRACK_DOMAIN: "track.postal.colman.com.br"
   SMTP_FROM_ADDRESS: "postal@colman.com.br"
+  WEB_SERVER_DEFAULT_BIND_ADDRESS: "0.0.0.0"
   
 
 services:

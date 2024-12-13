@@ -81,6 +81,9 @@ configs:
 volumes:
   postal-config: { }
   database: { }
+  ssh:
+    external:
+      true
 
 networks:
   caddy:

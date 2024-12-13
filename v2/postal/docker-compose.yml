@@ -71,11 +71,11 @@ services:
     environment:
       - BORG_PASSPHRASE
     configs:
-      - source: borgmatic-config-redmine
+      - source: borgmatic-config-postal
         target: /etc/borgmatic.d/config.yaml
 
 configs:
-  borgmatic-config-redmine:
+  borgmatic-config-postal:
     external: true
 
 volumes:

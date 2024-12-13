@@ -15,7 +15,7 @@ x-environment: &postal
   DNS_TRACK_DOMAIN: "track.postal.colman.com.br"
   SMTP_FROM_ADDRESS: "postal@colman.com.br"
   WEB_SERVER_DEFAULT_BIND_ADDRESS: "0.0.0.0"
-  
+
 
 services:
   mariadb:
@@ -61,6 +61,22 @@ services:
       <<: *postal
     volumes:
       - postal-config:/config
+  
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - database:/data/database
+      - postal-config:/data/postal
+      - ssh:/root/.ssh/
+    environment:
+      - BORG_PASSPHRASE
+    configs:
+      - source: borgmatic-config-redmine
+        target: /etc/borgmatic.d/config.yaml
+
+configs:
+  borgmatic-config-redmine:
+    external: true
 
 volumes:
   postal-config: { }

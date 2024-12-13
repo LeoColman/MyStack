@@ -55,7 +55,6 @@ services:
 
   collabora:
     image: collabora/code
-    restart: always
     networks:
       - caddy
     cap_add:

@@ -13,9 +13,9 @@ services:
       - caddy_data:/data
     deploy:
       labels:
-        caddy.email: caddy@colman.com.br
-        caddy: ritalee.colman.com.br
-        caddy.reverse_proxy: portainer:9000
+        caddy_0.email: caddy@colman.com.br
+        caddy_1: ritalee.colman.com.br
+        caddy_1.reverse_proxy: portainer:9000
       placement:
         constraints:
           - node.role == manager

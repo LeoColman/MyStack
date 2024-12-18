@@ -17,8 +17,6 @@ services:
       caddy.reverse_proxy: "{{upstreams 3000}}"
     volumes:
       - redmine:/usr/src/redmine
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
 
   database:
     image: mysql:5

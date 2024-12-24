@@ -100,4 +100,7 @@ networks:
 configs:
   otel_config:
     external: true
+    
+volumes:
+  dozzle:
 

@@ -82,7 +82,6 @@ services:
     image: amir20/dozzle:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - dozzle:/data
     networks:
       - caddy
     labels:
@@ -100,7 +99,3 @@ networks:
 configs:
   otel_config:
     external: true
-    
-volumes:
-  dozzle:
-

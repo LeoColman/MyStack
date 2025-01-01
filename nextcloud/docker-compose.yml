@@ -32,6 +32,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MARIADB_ROOT_PASSWORD
+      - OPCACHE_MEMORY_CONSUMPTION=256
+      - OPCACHE_MAX_ACCELERATED_FILES=10000
       - MAIL_FROM_ADDRESS=no-reply
       - MAIL_DOMAIN=colman.com.br
       - REDIS_HOST=redis

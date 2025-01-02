@@ -1,18 +1,20 @@
 version: "3"
-
 services:
-  gluetun:
-    image: qmcgaw/gluetun:v3.39.1
+  openvpn-client:
+    image: ghcr.io/wfg/openvpn-client
     cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
+      - NET_ADMIN 
     environment:
-      - VPN_SERVICE_PROVIDER=mullvad
-      - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=PnDoQ7oLs6GWi7FWl/a+wQIcBhzSTCIva4HfUhOESEQ=
-      - WIREGUARD_ADDRESSES=10.64.222.21/32
-      - SERVER_CITIES=Amsterdam
+      - KILL_SWITCH=on
+      - SUBNETS=192.168.0.0/24,192.168.1.0/24
+    devices:
+      - /dev/net/tun
+    volumes:
+      - openvpn:/data/vpn
+    ports:
+      - 5665:5665                         # Opening port for to access hypothetical Transmission container that would be routing through this VPN
+      - 1500:1500                         # Opening port for other application routing through VPN
+    restart: unless-stopped
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
@@ -23,9 +25,10 @@ services:
       - WEBUI_PORT=6011
     volumes:
       - qbittorrent:/config
-    network_mode: "service:gluetun"
+    network_mode: "service:openvpn-client"
 
 
 volumes:
+  openvpn: {}
   gluetun: { }
   qbittorrent: { }

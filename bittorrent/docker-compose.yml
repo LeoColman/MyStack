@@ -18,7 +18,7 @@ services:
       - VPN_TYPE=wireguard
       - WIREGUARD_ADDRESSES=10.73.33.0/32
     volumes:
-      - glueten:/gluetun
+      - gluetun:/gluetun
 #      - /dev/net/tun:/dev/net/tun
   
   qbittorrent:
@@ -30,9 +30,9 @@ services:
       - WEBUI_PORT=6011
     volumes:
       - qbittorrent:/config
-    network_mode: "service:glueten"
+    network_mode: "service:gluetun"
 
 
 volumes:
   qbittorrent: {  }
-  glueten: {}
+  gluetun: {}

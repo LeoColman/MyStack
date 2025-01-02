@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "6081:6881"
+      - "6081:6881/udp"
+      - "6011:6011"
+    environment:
+      - WIREGUARD_PRIVATE_KEY
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_ADDRESSES=10.73.33.0/32
+    volumes:
+      - glueten:/gluetun
+  
+  qbittorrent:
+    image: ghcr.io/linuxserver/qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=AMERICA/SAO_PAULO
+      - WEBUI_PORT=6011
+    volumes:
+      - qbittorrent/config:/config
+    network_mode: "service:glueten"
+    networks:
+      - default
+      - caddy
+
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  qbittorrent: {  }
+  glueten: {}

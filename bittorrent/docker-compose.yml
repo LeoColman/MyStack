@@ -16,12 +16,6 @@ services:
       - WIREGUARD_ADDRESSES=10.73.33.0/32
     volumes:
       - glueten:/gluetun
-    labels:
-      caddy: torrent.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 6011}}"
-    networks:
-      - default
-      - caddy
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

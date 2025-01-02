@@ -6,6 +6,8 @@ services:
     privileged: true
     cap_add:
       - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     ports:
       - "6081:6881"
       - "6081:6881/udp"
@@ -17,7 +19,6 @@ services:
       - WIREGUARD_ADDRESSES=10.73.33.0/32
     volumes:
       - glueten:/gluetun
-      - /dev/net/tun:/dev/net/tun
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

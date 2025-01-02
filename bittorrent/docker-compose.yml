@@ -4,6 +4,8 @@ services:
   gluetun:
     image: qmcgaw/gluetun
     privileged: true
+    devices:
+      - /dev/net/tun:/dev/net/tun
     cap_add:
       - NET_ADMIN
     ports:

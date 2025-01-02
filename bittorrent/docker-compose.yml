@@ -8,8 +8,6 @@ services:
       - NET_ADMIN
     security_opt:
       - apparmor=unconfined
-    devices:
-      - /dev/net/tun:/dev/net/tun
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard

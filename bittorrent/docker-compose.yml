@@ -3,6 +3,7 @@ version: "3"
 services:
   gluetun:
     image: qmcgaw/gluetun
+    privileged: true
     cap_add:
       - NET_ADMIN
     devices:

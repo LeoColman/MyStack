@@ -6,8 +6,8 @@ services:
     privileged: true
     cap_add:
       - NET_ADMIN
-    security_opt:
-      - apparmor=unconfined
+    volumes:
+      - /dev/net/tun:/dev/net/tun
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard

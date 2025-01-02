@@ -4,6 +4,8 @@ services:
   gluetun:
     image: qmcgaw/gluetun
     privileged: true
+    security_opt:
+      - label=disable
     cap_add:
       - NET_ADMIN
     devices:

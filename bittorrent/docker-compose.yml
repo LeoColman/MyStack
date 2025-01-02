@@ -24,16 +24,16 @@ services:
       - gluetun:/gluetun
 #      - /dev/net/tun:/dev/net/tun
   
-  qbittorrent:
-    image: ghcr.io/linuxserver/qbittorrent
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=AMERICA/SAO_PAULO
-      - WEBUI_PORT=6011
-    volumes:
-      - qbittorrent:/config
-    network_mode: "service:gluetun"
+#  qbittorrent:
+#    image: ghcr.io/linuxserver/qbittorrent
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=AMERICA/SAO_PAULO
+#      - WEBUI_PORT=6011
+#    volumes:
+#      - qbittorrent:/config
+#    network_mode: "service:gluetun"
 
 
 volumes:

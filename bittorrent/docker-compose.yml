@@ -6,6 +6,8 @@ services:
     privileged: true
     cap_add:
       - NET_ADMIN
+    security_opt:
+      - apparmor=unconfined
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:

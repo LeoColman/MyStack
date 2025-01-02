@@ -29,10 +29,6 @@ services:
     network_mode: "service:glueten"
 
 
-networks:
-  caddy:
-    external: true
-
 volumes:
   qbittorrent: {  }
   glueten: {}

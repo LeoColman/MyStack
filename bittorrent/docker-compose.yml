@@ -40,3 +40,7 @@ networks:
     driver: bridge
   caddy:
     external: true
+    
+volumes:
+  - qbittorrent
+  - openvpn

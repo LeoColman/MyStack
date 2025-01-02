@@ -1,25 +1,15 @@
 version: "3.8"
 
 services:
-  gluetun:
-    image: qmcgaw/gluetun
+  openvpn:
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
+    image: kylemanna/openvpn
     ports:
-      - "8888:8888/tcp"
-      - "8388:8388/tcp"
-      - "8388:8388/udp"
-      - "6011:6011"
-    environment:
-      - WIREGUARD_PRIVATE_KEY
-      - VPN_SERVICE_PROVIDER=mullvad
-      - VPN_TYPE=wireguard
-      - WIREGUARD_ADDRESSES=10.73.33.0/32
+      - "1194:1194/udp"
+    restart: always
     volumes:
-      - gluetun:/gluetun
-    dns: 1.1.1.1
+      - openvpn-data:/etc/openvpn
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
@@ -30,9 +20,9 @@ services:
       - WEBUI_PORT=6011
     volumes:
       - qbittorrent:/config
-    network_mode: "service:gluetun"
+    network_mode: "service:openvpn"
 
 
 volumes:
-  qbittorrent: {  }
-  gluetun: {}
+  openvpn-data: { }
+  qbittorrent: { }

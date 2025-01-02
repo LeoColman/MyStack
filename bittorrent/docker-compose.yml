@@ -42,5 +42,5 @@ networks:
     external: true
     
 volumes:
-  - qbittorrent
-  - openvpn
+  qbittorrent:
+  openvpn:

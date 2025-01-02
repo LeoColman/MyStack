@@ -3,20 +3,18 @@ services:
   openvpn-client:
     image: ghcr.io/wfg/openvpn-client
     cap_add:
-      - NET_ADMIN 
+      - NET_ADMIN
     environment:
-      - KILL_SWITCH=off
+      - KILL_SWITCH=on
       - SUBNETS=192.168.0.0/24,192.168.1.0/24
     devices:
       - /dev/net/tun
     volumes:
       - openvpn:/data/vpn
-    ports:
-      - 5665:5665                         # Opening port for to access hypothetical Transmission container that would be routing through this VPN
-      - 1500:1500                         # Opening port for other application routing through VPN
-      - 8080:8080
+    networks:
+      - vpn-network
     restart: unless-stopped
-  
+
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
     environment:
@@ -26,10 +24,17 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - qbittorrent:/config
-    network_mode: "service:openvpn-client"
+    networks:
+      - vpn-network
+      - caddy
+    depends_on:
+      - openvpn-client
+    extra_hosts:
+      - "openvpn-client:192.168.0.2"
+    labels:
+      caddy: qbittorrent.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
 
-
-volumes:
-  openvpn: {}
-  gluetun: { }
-  qbittorrent: { }
+networks:
+  vpn-network:
+    driver: bridge

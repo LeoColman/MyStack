@@ -38,3 +38,5 @@ services:
 networks:
   vpn-network:
     driver: bridge
+  caddy:
+    external: true

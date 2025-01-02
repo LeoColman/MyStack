@@ -17,7 +17,7 @@ services:
       - WIREGUARD_ADDRESSES=10.73.33.0/32
     volumes:
       - glueten:/gluetun
-      - /dev/net/tun:/dev/net/tun
+#      - /dev/net/tun:/dev/net/tun
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

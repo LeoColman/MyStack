@@ -3,6 +3,7 @@ version: "3.8"
 services:
   gluetun:
     image: qmcgaw/gluetun
+    privileged: true
     cap_add:
       - NET_ADMIN
     ports:
@@ -16,7 +17,6 @@ services:
       - WIREGUARD_ADDRESSES=10.73.33.0/32
     volumes:
       - glueten:/gluetun
-      - /dev/net/tun:/dev/net/tun
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

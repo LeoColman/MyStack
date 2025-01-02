@@ -3,28 +3,16 @@ version: "3"
 services:
   gluetun:
     image: qmcgaw/gluetun
-    privileged: true
-    security_opt:
-      - label=disable
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-    ports:
-      - "6011:6011"
-      - "8888:8888/tcp"
-      - "8388:8388/tcp"
-      - "8388:8388/udp"
     environment:
-      - WIREGUARD_PRIVATE_KEY
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
-      - WIREGUARD_ADDRESSES=10.73.33.0/32
-    volumes:
-      - gluetun:/gluetun
-#      - /dev/net/tun:/dev/net/tun
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
+      - WIREGUARD_PRIVATE_KEY
+      - WIREGUARD_ADDRESSES=10.64.222.21/32
+      - SERVER_CITIES=Amsterdam
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

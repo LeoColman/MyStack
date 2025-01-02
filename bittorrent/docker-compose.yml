@@ -7,7 +7,7 @@ services:
     cap_add:
       - NET_ADMIN
     devices:
-      - /dev/net/tun
+      - /dev/net/tun:/dev/net/tun
     ports:
       - "6081:6881"
       - "6081:6881/udp"

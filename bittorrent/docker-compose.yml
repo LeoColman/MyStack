@@ -14,11 +14,12 @@ services:
     ports:
       - 5665:5665                         # Opening port for to access hypothetical Transmission container that would be routing through this VPN
       - 1500:1500                         # Opening port for other application routing through VPN
-      - 8080:8080
     restart: unless-stopped
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
+    ports:
+      - 8080:8080
     environment:
       - PUID=1000
       - PGID=1000

@@ -24,7 +24,12 @@ services:
     volumes:
       - deluge-config:/config
       - deluge-downloads:/downloads
-    network_mode: "service:openvpn-client"  # Use the VPN container's network
+    ports:
+      - 58846:58846     # Daemon port
+      - 58946:58946     # Torrent network port
+    restart: unless-stopped
+    networks:
+      - caddy
 
   deluge-web-proxy:
     image: linuxserver/deluge

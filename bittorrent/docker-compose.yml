@@ -30,7 +30,7 @@ services:
     network_mode: "service:openvpn-client"  # Use the VPN container's network
     
   opentracker:
-    image: linuxserver/opentracker
+    image: lednerb/opentracker-docker
     environment:
       - PUID=1000
       - PGID=1000

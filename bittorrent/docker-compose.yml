@@ -13,37 +13,39 @@ services:
       - openvpn:/data/vpn
     networks:
       - vpn-network
-    restart: unless-stopped
-  
-  
+
   deluge:
     image: linuxserver/deluge
     container_name: deluge
     environment:
-      - PUID=1000       
-      - PGID=1000       
-      - TZ=Etc/UTC      
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
     volumes:
       - deluge-config:/config
       - deluge-downloads:/downloads
-    ports:
-      - 58846:58846     # Daemon port
-      - 58946:58946     # Torrent network port
-    restart: unless-stopped
+    network_mode: "service:openvpn-client"  # Use the VPN container's network
+
+  deluge-web-proxy:
+    image: linuxserver/deluge
+    container_name: deluge-web-proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - deluge-config:/config 
     networks:
-      - vpn-network
       - caddy
     labels:
       caddy: deluge.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8112}}"
-  
 
 networks:
   vpn-network:
-    driver: bridge
   caddy:
     external: true
-    
+
 volumes:
   openvpn:
   deluge-config:

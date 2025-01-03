@@ -33,10 +33,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+      - DELUGE_DAEMON_ADDR=deluge  # Connect to the daemon by name
+      - DELUGE_DAEMON_PORT=58846   # Daemon port
     volumes:
       - deluge-config:/config 
     networks:
       - caddy
+      - vpn-network
     labels:
       caddy: deluge.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8112}}"

@@ -20,7 +20,6 @@ services:
       
   deluge:
     image: linuxserver/deluge
-    container_name: deluge
     environment:
       - PUID=1000
       - PGID=1000

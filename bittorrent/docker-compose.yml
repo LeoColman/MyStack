@@ -13,7 +13,11 @@ services:
       - openvpn:/data/vpn
     networks:
       - vpn-network
-
+      - caddy
+    labels:
+      caddy: deluge.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8112}}"
+      
   deluge:
     image: linuxserver/deluge
     container_name: deluge
@@ -25,25 +29,7 @@ services:
       - deluge-config:/config
       - deluge-downloads:/downloads
     network_mode: "service:openvpn-client"  # Use the VPN container's network
-
-  deluge-web-proxy:
-    image: linuxserver/deluge
-    container_name: deluge-web-proxy
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - DELUGE_DAEMON_ADDR=deluge  # Connect to the daemon by name
-      - DELUGE_DAEMON_PORT=58846   # Daemon port
-    volumes:
-      - deluge-config:/config 
-    networks:
-      - caddy
-      - vpn-network
-    labels:
-      caddy: deluge.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 8112}}"
-
+  
 networks:
   vpn-network:
   caddy:

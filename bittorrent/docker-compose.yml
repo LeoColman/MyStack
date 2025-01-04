@@ -15,8 +15,10 @@ services:
       - vpn-network
       - caddy
     labels:
-      caddy: deluge.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 8112}}"
+      caddy_0: deluge.colman.com.br
+      caddy_0.reverse_proxy: "{{upstreams 8112}}"
+      caddy_1: qbittorrent.colman.com.br
+      caddy_1.reverse_proxy: "{{upstreams 6011}}"
       
   deluge:
     image: linuxserver/deluge
@@ -31,11 +33,10 @@ services:
   
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
-    container_name: qbittorrent
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Madrid
+      - TZ=America/Sao_Paulo
       - WEBUI_PORT=6011
     volumes:
       - qbittorrent-config:/config

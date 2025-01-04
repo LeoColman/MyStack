@@ -41,7 +41,7 @@ services:
     volumes:
       - deluge-config:/config
       - deluge-downloads:/downloads
-    network_mode: "container:openvpn-client"   
+    network_mode: "service:openvpn-client"   
     
   opentracker:
     image: lednerb/opentracker-docker

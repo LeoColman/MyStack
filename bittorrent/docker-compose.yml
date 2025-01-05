@@ -15,8 +15,8 @@ services:
       - vpn-network
       - caddy
     labels:
-      caddy_1: "transmission.colman.com.br"
-      caddy_1.reverse_proxy: "{{upstreams 9091}}"
+      caddy: "deluge.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams 9091}}"
   
   
   transmission:

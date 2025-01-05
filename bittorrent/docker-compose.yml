@@ -52,6 +52,7 @@ services:
       - "6969:6969/udp"   
       - "6969:6969/tcp"   
     networks:
+      - vpn-network
       - caddy
     labels:
       caddy: tracker.colman.com.br

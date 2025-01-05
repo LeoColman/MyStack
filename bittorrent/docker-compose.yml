@@ -54,8 +54,6 @@ services:
     networks:
       - vpn-network
       - caddy
-    labels:
-      caddy: tracker.colman.com.br
   
 networks:
   vpn-network:

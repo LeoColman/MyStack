@@ -15,7 +15,7 @@ services:
       - vpn-network
       - caddy
     labels:
-      caddy: transmission.colman.com.br
+      caddy: "transmission.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 9091}}"
   
   

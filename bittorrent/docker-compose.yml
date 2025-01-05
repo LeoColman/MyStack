@@ -16,7 +16,7 @@ services:
       - caddy
     labels:
       caddy: deluge.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 8122}}"
+      caddy.reverse_proxy: "{{upstreams 8112}}"
       
       
   deluge:

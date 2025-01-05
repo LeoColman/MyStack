@@ -1,5 +1,23 @@
 version: "3"
-services:   
+services:
+  openvpn-client:
+    image: ghcr.io/wfg/openvpn-client
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - KILL_SWITCH=on
+      - SUBNETS=192.168.0.0/24,172.18.0.0/16
+    devices:
+      - /dev/net/tun
+    volumes:
+      - openvpn:/data/vpn
+    networks:
+      - vpn-network
+      - caddy
+    labels:
+      caddy: "deluge.colman.com.br"
+      caddy.reverse_proxy: "{{upstreams 9091}}"
+     
       
   deluge:
     image: linuxserver/deluge
@@ -10,8 +28,7 @@ services:
     volumes:
       - deluge-config:/config
       - deluge-downloads:/downloads
-    networks:
-      - caddy
+    network_mode: "service:openvpn-client"  # Use the VPN container's network
   
     
   opentracker:
@@ -23,6 +40,7 @@ services:
       - "6969:6969/udp"   
       - "6969:6969/tcp"   
     networks:
+      - vpn-network
       - caddy
     labels:
       caddy: tracker.colman.com.br

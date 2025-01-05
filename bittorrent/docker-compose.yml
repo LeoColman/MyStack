@@ -6,7 +6,7 @@ services:
       - NET_ADMIN
     environment:
       - KILL_SWITCH=on
-      - SUBNETS=192.168.0.0/24,192.168.1.0/24,172.18.0.0/16,172.19.0.0/16
+      - SUBNETS=192.168.0.0/24,172.18.0.0/16
     devices:
       - /dev/net/tun
     volumes:
@@ -58,6 +58,7 @@ services:
   
 networks:
   vpn-network:
+    driver: bridge
   caddy:
     external: true
 

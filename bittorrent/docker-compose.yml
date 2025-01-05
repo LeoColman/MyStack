@@ -15,7 +15,7 @@ services:
       - vpn-network
       - caddy
     labels:
-      caddy: "deluge.colman.com.br"
+      caddy: qbittorrent.colman.com.br
       caddy.reverse_proxy: "{{upstreams 6011}}"
      
       

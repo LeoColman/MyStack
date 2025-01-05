@@ -6,7 +6,7 @@ services:
       - NET_ADMIN
     environment:
       - KILL_SWITCH=on
-      - SUBNETS=192.168.0.0/24,192.168.1.0/24
+      - SUBNETS=192.168.0.0/24,192.168.1.0/24,172.18.0.0/16,172.19.0.0/16
     devices:
       - /dev/net/tun
     volumes:
@@ -15,10 +15,9 @@ services:
       - vpn-network
       - caddy
     labels:
-      caddy_0: deluge.colman.com.br
-      caddy_0.reverse_proxy: "{{upstreams 8112}}"
       caddy_1: qbittorrent.colman.com.br
       caddy_1.reverse_proxy: "{{upstreams 6011}}"
+      
       
 #  deluge:
 #    image: linuxserver/deluge
@@ -50,7 +49,7 @@ services:
       - PGID=1000
     ports:
       - "6969:6969/udp"   
-      - "6969:6969"   
+      - "6969:6969/tcp"   
     networks:
       - vpn-network
       - caddy

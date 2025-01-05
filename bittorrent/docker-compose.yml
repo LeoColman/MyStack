@@ -17,6 +17,9 @@ services:
     labels:
       caddy: deluge.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8112}}"
+    ports:
+      - "6881:6881/tcp"
+      - "6881:6881/udp"
       
       
   deluge:

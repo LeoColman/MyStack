@@ -17,18 +17,32 @@ services:
     labels:
       caddy: deluge.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8112}}"
-      
-      
-  deluge:
-    image: linuxserver/deluge
+  
+  
+  transmission:
+    image: linuxserver/transmission
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+      - TRANSMISSION_WEB_UI=combustion  # Optional: Use a better UI for Transmission
+      - USER=username  # Optional: Set a username for the Transmission web UI
+      - PASS=password  # Optional: Set a password for the Transmission web UI
     volumes:
       - deluge-config:/config
       - deluge-downloads:/downloads
-    network_mode: "service:openvpn-client"  # Use the VPN container's network
+    network_mode: "service:openvpn-client"  # Use VPN for Transmission     
+      
+#  deluge:
+#    image: linuxserver/deluge
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=Etc/UTC
+#    volumes:
+#      - deluge-config:/config
+#      - deluge-downloads:/downloads
+#    network_mode: "service:openvpn-client"  # Use the VPN container's network
   
 #  qbittorrent:
 #    image: ghcr.io/linuxserver/qbittorrent

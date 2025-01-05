@@ -39,7 +39,7 @@ services:
       - TZ=America/Sao_Paulo
       - WEBUI_PORT=6011
     volumes:
-      - deluge-config:/config
+      - qbittorrent-config:/config
       - deluge-downloads:/downloads
     network_mode: "service:openvpn-client"  
     

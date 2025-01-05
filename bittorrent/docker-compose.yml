@@ -16,7 +16,7 @@ services:
       - caddy
     labels:
       caddy: "deluge.colman.com.br"
-      caddy.reverse_proxy: "{{upstreams 8112}}"
+      caddy.reverse_proxy: "{{upstreams 6011}}"
      
       
   deluge:
@@ -29,7 +29,19 @@ services:
       - deluge-config:/config
       - deluge-downloads:/downloads
     network_mode: "service:openvpn-client"  # Use the VPN container's network
-  
+    
+    
+  qbittorrent:
+    image: ghcr.io/linuxserver/qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - WEBUI_PORT=6011
+    volumes:
+      - deluge-config:/config
+      - deluge-downloads:/downloads
+    network_mode: "service:openvpn-client"  
     
   opentracker:
     image: lednerb/opentracker-docker

@@ -19,16 +19,16 @@ services:
       caddy.reverse_proxy: "{{upstreams 6011}}"
      
       
-  deluge:
-    image: linuxserver/deluge
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - deluge-config:/config
-      - deluge-downloads:/downloads
-    network_mode: "service:openvpn-client"  # Use the VPN container's network
+#  deluge:
+#    image: linuxserver/deluge
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=Etc/UTC
+#    volumes:
+#      - deluge-config:/config
+#      - deluge-downloads:/downloads
+#    network_mode: "service:openvpn-client"  # Use the VPN container's network
     
     
   qbittorrent:

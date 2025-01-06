@@ -29,7 +29,7 @@ services:
     volumes:
       - qbittorrent-config:/config
       - qbittorrent-downloads:/downloads
-    network_mode: "service:openvpn-client"  
+    network_mode: "service:wireguard"  
     
   opentracker:
     image: lednerb/opentracker-docker
@@ -39,8 +39,6 @@ services:
     ports:
       - "6969:6969/udp"   
       - "6969:6969/tcp"   
-    volumes:
-      - openvpn:/data/vpn
     networks:
       - caddy
   

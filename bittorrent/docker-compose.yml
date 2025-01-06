@@ -6,7 +6,7 @@ services:
       - NET_ADMIN
     environment:
       - KILL_SWITCH=on
-      - SUBNETS=192.168.0.0/24,172.18.0.0/16
+      - SUBNETS=192.168.0.0/24,172.19.0.0/16
     devices:
       - /dev/net/tun
     volumes:
@@ -51,6 +51,8 @@ services:
     ports:
       - "6969:6969/udp"   
       - "6969:6969/tcp"   
+    volumes:
+      - openvpn:/data/vpn
     networks:
       - vpn-network
       - caddy

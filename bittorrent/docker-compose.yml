@@ -4,7 +4,6 @@ services:
     image: lscr.io/linuxserver/wireguard:latest
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
     environment:
       - PUID=1000
       - PGID=1000
@@ -18,6 +17,9 @@ services:
     restart: unless-stopped
     networks:
       - caddy
+    labels:
+      caddy: qbittorrent.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 6011}}"
     
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent

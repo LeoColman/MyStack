@@ -1,20 +1,23 @@
 version: "3"
 services:
-  wireguard:
-    image: lscr.io/linuxserver/wireguard:latest
+  gluetun:
+    image: qmcgaw/gluetun
     cap_add:
       - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - wireguard:/config
+    devices:
+      - /dev/net/tun:/dev/net/tun
     ports:
-      - "51820:51820/udp"
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    restart: unless-stopped
+      - "8888:8888/tcp" 
+      - "8388:8388/tcp" 
+      - "8388:8388/udp" 
+    volumes:
+      - gluetun:/gluetun
+    environment:
+      # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY
+      - WIREGUARD_ADDRESSES=10.64.222.21/32
     networks:
       - caddy
     labels:
@@ -31,7 +34,7 @@ services:
     volumes:
       - qbittorrent-config:/config
       - qbittorrent-downloads:/downloads
-    network_mode: "service:wireguard"  
+    network_mode: "service:gluetun"  
     
   opentracker:
     image: lednerb/opentracker-docker

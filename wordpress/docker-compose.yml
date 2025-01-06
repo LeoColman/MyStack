@@ -17,7 +17,7 @@ services:
     image: ubuntu
     volumes:
       - database:/var/lib/mysql
-    command: ["/bin/bash"]
+    command: ["tail", "-f", "/dev/null"]
     environment:
       - MARIADB_DATABASE=wordpress
       - MARIADB_USER=wordpress

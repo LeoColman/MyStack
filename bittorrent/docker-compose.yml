@@ -1,35 +1,23 @@
 version: "3"
 services:
-  openvpn-client:
-    image: ghcr.io/wfg/openvpn-client
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
     cap_add:
       - NET_ADMIN
+      - SYS_MODULE
     environment:
-      - KILL_SWITCH=on
-      - SUBNETS=172.20.0.0/16,172.19.0.0/16
-    devices:
-      - /dev/net/tun
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
     volumes:
-      - openvpn:/data/vpn
+      - wireguard:/config
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
     networks:
-      - vpn-network
       - caddy
-    labels:
-      caddy: qbittorrent.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 6011}}"
-     
-      
-#  deluge:
-#    image: linuxserver/deluge
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#      - TZ=Etc/UTC
-#    volumes:
-#      - deluge-config:/config
-#      - deluge-downloads:/downloads
-#    network_mode: "service:openvpn-client"  # Use the VPN container's network
-    
     
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent
@@ -40,7 +28,7 @@ services:
       - WEBUI_PORT=6011
     volumes:
       - qbittorrent-config:/config
-      - deluge-downloads:/downloads
+      - qbittorrent-downloads:/downloads
     network_mode: "service:openvpn-client"  
     
   opentracker:
@@ -54,18 +42,13 @@ services:
     volumes:
       - openvpn:/data/vpn
     networks:
-      - vpn-network
       - caddy
   
 networks:
-  vpn-network:
-    driver: bridge
   caddy:
     external: true
 
 volumes:
-  openvpn:
-  deluge-config:
-  deluge-downloads:
   qbittorrent-downloads:
   qbittorrent-config:
+  wireguard:

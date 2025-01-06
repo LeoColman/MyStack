@@ -12,6 +12,18 @@ services:
       - MARIADB_ROOT_PASSWORD
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
+      
+  database-rescue:
+    image: ubuntu
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USER=wordpress
+      - MARIADB_PASSWORD
+      - MARIADB_ROOT_PASSWORD
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}" ]
 
   wordpress:
     image: wordpress:6

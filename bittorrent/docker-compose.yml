@@ -17,7 +17,7 @@ services:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY
-      - WIREGUARD_ADDRESSES=10.64.222.21/32
+      - WIREGUARD_ADDRESSES=10.71.236.101/32
     networks:
       - caddy
     labels:
@@ -54,4 +54,4 @@ networks:
 volumes:
   qbittorrent-downloads:
   qbittorrent-config:
-  wireguard:
+  gluetun:

@@ -6,10 +6,6 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-    ports:
-      - "8888:8888/tcp" 
-      - "8388:8388/tcp" 
-      - "8388:8388/udp" 
     volumes:
       - gluetun:/gluetun
     environment:
@@ -17,7 +13,7 @@ services:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY
-      - WIREGUARD_ADDRESSES=10.71.236.101/32
+      - WIREGUARD_ADDRESSES
     networks:
       - caddy
     labels:

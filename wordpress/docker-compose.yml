@@ -17,7 +17,7 @@ services:
     image: ubuntu
     volumes:
       - database:/var/lib/mysql
-    command: ["bash", "-c", "apt-get update && apt-get install -y mariadb-server"]
+    command: ["bash", "-c", "apt-get update && apt-get install -y mariadb-server && bash"]
     environment:
       - MARIADB_DATABASE=wordpress
       - MARIADB_USER=wordpress

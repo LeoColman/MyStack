@@ -56,3 +56,4 @@ networks:
 
 volumes:
   portainer_data:
+  caddy_data:

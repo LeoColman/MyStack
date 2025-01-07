@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.8'
 
 services:
   caddy:
@@ -46,6 +46,24 @@ services:
     labels:
       caddy: ritalee.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9000}}"
+
+  backup:
+    image: b3vis/borgmatic
+    volumes:
+      - portainer_data:/data/portainer
+      - ssh:/root/.ssh/
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+    configs:
+      - source: borgmatic-config-portainer
+        target: /etc/borgmatic.d/config.yaml
+
+
+configs:
+  borgmatic-config-portainer:
+    external: true
+  
 
 networks:
   agent_network:

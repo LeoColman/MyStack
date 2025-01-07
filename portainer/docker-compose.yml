@@ -53,7 +53,7 @@ services:
       - portainer_data:/data/portainer
       - ssh:/root/.ssh/
     environment:
-      - BORG_PASSPHRASE
+      - BORG_PASSPHRASE  
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
     configs:
       - source: borgmatic-config-portainer
@@ -74,4 +74,6 @@ networks:
 
 volumes:
   portainer_data:
+  ssh: 
+    external: true
   caddy_data:

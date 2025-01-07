@@ -1,0 +1,58 @@
+version: '3.2'
+
+services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy
+    ports:
+      - "80:80"
+      - "443:443/tcp"
+      - "443:443/udp" # HTTP/3 Support
+    networks:
+      - caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
+      placement:
+        constraints:
+          - node.role == manager
+    healthcheck:
+      test: [ "CMD", "/bin/caddy", "version" ]
+  
+  
+  agent:
+    image: portainer/agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - agent_network
+    deploy:
+      mode: global
+
+  portainer:
+    image: portainer/portainer-ce:alpine
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    ports:
+      - "9443:9443"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agent_network
+      - caddy
+    labels:
+      caddy: ritalee.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true
+  caddy:
+    external: true
+
+volumes:
+  portainer_data:

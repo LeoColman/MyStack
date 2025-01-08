@@ -1,5 +1,3 @@
-name: "github-workflows-kt"
-
 services:
   github-workflows-kts:
     image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line

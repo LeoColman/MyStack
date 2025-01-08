@@ -18,7 +18,7 @@ services:
     volumes:
       - wordpress:/var/www/html
     environment:
-      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_HOST=database
       - WORDPRESS_DB_NAME=wordpress
       - WORDPRESS_DB_PASSWORD

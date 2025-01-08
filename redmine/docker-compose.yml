@@ -1,6 +1,6 @@
 services:
   redmine:
-    image: redmine:5-alpine
+    image: redmine:5.0.10-alpine
     depends_on:
       - database
     environment:

@@ -50,8 +50,8 @@ services:
     container_name: traces_collector
     depends_on:
       - jaeger
-      - default
     networks:
+      default:
       caddy:
         aliases: [ traces_collector ]
     configs:

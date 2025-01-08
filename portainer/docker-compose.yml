@@ -1,27 +1,7 @@
+# dclint disable require-project-name-field
 services:
-  caddy:
-    image: lucaslorentz/caddy-docker-proxy
-    ports:
-      - "80:80"
-      - "443:443/tcp"
-      - "443:443/udp" # HTTP/3 Support
-    networks:
-      - caddy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - caddy_data:/data
-    deploy:
-      labels:
-        caddy.email: caddy@colman.com.br
-      placement:
-        constraints:
-          - node.role == manager
-    healthcheck:
-      test: [ "CMD", "/bin/caddy", "version" ]
-  
-  
   agent:
-    image: portainer/agent
+    image: portainer/agent:lts
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
@@ -30,38 +10,52 @@ services:
     deploy:
       mode: global
 
-  portainer:
-    image: portainer/portainer-ce:alpine
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
-    ports:
-      - "9443:9443"
-    volumes:
-      - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - agent_network
-      - caddy
-    labels:
-      caddy: ritalee.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9000}}"
-
   backup:
-    image: b3vis/borgmatic
+    image: b3vis/borgmatic:1.9
     volumes:
       - portainer_data:/data/portainer
       - ssh:/root/.ssh/
-    environment:
-      - BORG_PASSPHRASE  
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
     configs:
       - source: borgmatic-config-portainer
         target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.9.1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    ports:
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443/tcp'
+      - '0.0.0.0:443:443/udp'
+    networks:
+      - caddy
+    healthcheck:
+      test: [ "CMD", "/bin/caddy", "version" ]
+    deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
+      placement:
+        constraints:
+          - node.role == manager
 
-configs:
-  borgmatic-config-portainer:
-    external: true
-  
+  portainer:
+    image: portainer/portainer-ce:alpine
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '0.0.0.0:9443:9443'
+    networks:
+      - agent_network
+      - caddy
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    labels:
+      caddy: ritalee.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9000}}"
 
 networks:
   agent_network:
@@ -72,6 +66,11 @@ networks:
 
 volumes:
   portainer_data:
-  ssh: 
+  ssh:
     external: true
   caddy_data:
+
+
+configs:
+  borgmatic-config-portainer:
+    external: true

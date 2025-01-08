@@ -45,6 +45,7 @@ services:
   traces_collector:
     image: otel/opentelemetry-collector-contrib:latest
     command: ["--config=/etc/otelcol/config.yaml"]
+    container_name: traces_collector
     depends_on:
       - jaeger
     networks:

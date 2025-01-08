@@ -12,6 +12,7 @@ services:
       - jaeger
     networks:
       - caddy
+      - default
     labels:
       caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -23,6 +24,7 @@ services:
     image: jaegertracing/all-in-one:latest
     networks:
       - caddy
+      - default
     healthcheck:
       test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
       interval: 30s
@@ -48,6 +50,7 @@ services:
     container_name: traces_collector
     depends_on:
       - jaeger
+      - default
     networks:
       caddy:
         aliases: [ traces_collector ]
@@ -59,6 +62,7 @@ services:
     image: prom/prometheus:latest
     networks:
       - caddy
+      - default
     labels:
       caddy: prometheus.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9090}}"

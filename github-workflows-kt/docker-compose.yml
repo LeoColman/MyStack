@@ -48,7 +48,8 @@ services:
     depends_on:
       - jaeger
     networks:
-      - caddy
+      caddy:
+        aliases: [ traces_collector ]
     configs:
       - source: otel_config
         target: /etc/otelcol/config.yaml

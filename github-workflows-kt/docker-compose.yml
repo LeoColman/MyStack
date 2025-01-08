@@ -7,9 +7,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    depends_on:
-      - otel_collector
-      - jaeger
+#    depends_on:
+#      - otel_collector
+#      - jaeger
     networks:
       - caddy
     labels:
@@ -19,63 +19,63 @@ services:
     environment:
       - GITHUB_TOKEN
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    networks:
-      - caddy
-    healthcheck:
-      test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    environment:
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
-      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
-      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
-      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
-    labels:
-      caddy: jaeger.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 16686}}"
-      caddy.basic_auth: "* bcrypt"
-      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
-
-  otel_collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    command: ["--config=/etc/otelcol/config.yaml"]
-    depends_on:
-      - jaeger
-    networks:
-      caddy:
-        aliases: [ traces_collector ]
-    configs:
-      - source: otel_config
-        target: /etc/otelcol/config.yaml
-
-  prometheus:
-    image: prom/prometheus:latest
-    networks:
-      - caddy
-    labels:
-      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9090}}"
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        echo "
-        global:
-          scrape_interval:     15s
-          evaluation_interval: 15s
-
-        scrape_configs:
-          - job_name: 'aggregated-trace-metrics'
-            static_configs:
-              - targets: ['otel_collector:8889']
-        " > /etc/prometheus/prometheus.yml && \
-        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
+#  jaeger:
+#    image: jaegertracing/all-in-one:latest
+#    networks:
+#      - caddy
+#    healthcheck:
+#      test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#      start_period: 30s
+#    environment:
+#      - METRICS_STORAGE_TYPE=prometheus
+#      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+#      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
+#      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
+#      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
+#      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
+#    labels:
+#      caddy: jaeger.github-workflows-kt-bindings.colman.com.br
+#      caddy.reverse_proxy: "{{upstreams 16686}}"
+#      caddy.basic_auth: "* bcrypt"
+#      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
+#
+#  otel_collector:
+#    image: otel/opentelemetry-collector-contrib:latest
+#    command: ["--config=/etc/otelcol/config.yaml"]
+#    depends_on:
+#      - jaeger
+#    networks:
+#      caddy:
+#        aliases: [ traces_collector ]
+#    configs:
+#      - source: otel_config
+#        target: /etc/otelcol/config.yaml
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    networks:
+#      - caddy
+#    labels:
+#      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
+#      caddy.reverse_proxy: "{{upstreams 9090}}"
+#    entrypoint:
+#      - /bin/sh
+#      - -c
+#      - |
+#        echo "
+#        global:
+#          scrape_interval:     15s
+#          evaluation_interval: 15s
+#
+#        scrape_configs:
+#          - job_name: 'aggregated-trace-metrics'
+#            static_configs:
+#              - targets: ['otel_collector:8889']
+#        " > /etc/prometheus/prometheus.yml && \
+#        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 
 #  dozzle:
 #    image: amir20/dozzle:latest

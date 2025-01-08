@@ -1,15 +1,16 @@
+# dclint disable require-project-name-field
 services:
   searxng:
-    image: searxng/searxng:latest
-    networks:
-      - caddy
+    image: searxng/searxng:2025.1.6-e35292618
     environment:
       SEARXNG_BASE_URL: "https://searxng.colman.com.br"
+    networks:
+      - caddy
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://0.0.0.0:8080/healthz" ]
     labels:
       caddy: searxng.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://0.0.0.0:8080/healthz"]
 networks:
   caddy:
     external: true

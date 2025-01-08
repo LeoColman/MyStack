@@ -1,3 +1,4 @@
+# dclint disable require-project-name-field
 x-environment: &postal
   POSTAL_WEB_HOSTNAME: postal.colman.com.br
   POSTAL_SMTP_HOSTNAME: postal.colman.com.br
@@ -14,76 +15,73 @@ x-environment: &postal
   SMTP_FROM_ADDRESS: "postal@colman.com.br"
   WEB_SERVER_DEFAULT_BIND_ADDRESS: "0.0.0.0"
 
-
 services:
+  backup:
+    image: b3vis/borgmatic:1.9
+    volumes:
+      - database:/data/database
+      - postal-config:/data/postal
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-postal
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
   mariadb:
-    image: mariadb
+    image: mariadb:lts
+    volumes:
+      - database:/var/lib/mysql
     environment:
       MARIADB_USER: postal
       MARIADB_PASSWORD: postal
       MARIADB_ROOT_PASSWORD: postal
+
+  smtp:
+    image: ghcr.io/postalserver/postal:3.3.4
     volumes:
-      - database:/var/lib/mysql
-  
+      - postal-config:/config
+    environment:
+      <<: *postal
+    ports:
+      - '0.0.0.0:25:25'
+    command: postal smtp-server
+    cap_add:
+      - NET_BIND_SERVICE
+
   web:
-    image: ghcr.io/postalserver/postal
-    command: postal web-server
+    image: ghcr.io/postalserver/postal:3.3.4
+    volumes:
+      - postal-config:/config
     environment:
       <<: *postal
     networks:
       - caddy
       - default
-    volumes:
-      - postal-config:/config
+    command: postal web-server
     labels:
       caddy: "postal.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 5000}}"
 
-  smtp:
-    image: ghcr.io/postalserver/postal
-    command: postal smtp-server
-    environment:
-      <<: *postal
-    ports:
-      - "25:25"
-    cap_add:
-      - NET_BIND_SERVICE
-    volumes:
-      - postal-config:/config
-  
-  
   worker:
-    image: ghcr.io/postalserver/postal
-    command: postal worker
-    environment:
-      <<: *postal
+    image: ghcr.io/postalserver/postal:3.3.4
     volumes:
       - postal-config:/config
-  
-  backup:
-    image: b3vis/borgmatic
-    volumes:
-      - database:/data/database
-      - postal-config:/data/postal
-      - ssh:/root/.ssh/
     environment:
-      - BORG_PASSPHRASE
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
-    configs:
-      - source: borgmatic-config-postal
-        target: /etc/borgmatic.d/config.yaml
-
-configs:
-  borgmatic-config-postal:
-    external: true
-
-volumes:
-  postal-config: { }
-  database: { }
-  ssh:
-    external: true
+      <<: *postal
+    command: postal worker
 
 networks:
   caddy:
     external: true
-    
+
+volumes:
+  postal-config: {}
+  database: {}
+  ssh:
+    external: true
+
+configs:
+  borgmatic-config-postal:
+    external: true

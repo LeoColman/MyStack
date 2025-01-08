@@ -1,3 +1,4 @@
+# dclint disable require-project-name-field
 services:
   librespeed:
     image: ghcr.io/librespeed/speedtest:latest-alpine
@@ -6,13 +7,13 @@ services:
       - TZ=America/Sao_Paulo
       - TITLE=Colman's Libre Speed
       - PASSWORD
-    labels:
-      caddy: librespeed.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 8080}}"
     networks:
       - caddy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+    labels:
+      caddy: librespeed.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
 
 networks:
   caddy:

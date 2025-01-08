@@ -1,8 +1,44 @@
+# dclint disable require-project-name-field
 services:
+
+  backup:
+    image: b3vis/borgmatic:1.9
+    volumes:
+      - database:/data/database
+      - redmine:/data/redmine
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-redmine
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
+  database:
+    image: mysql:5
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=db
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD}"
+        ]
   redmine:
     image: redmine:5.1.4-alpine
     depends_on:
       - database
+    volumes:
+      - redmine:/usr/src/redmine
     environment:
       - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD
@@ -13,35 +49,6 @@ services:
     labels:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
-    volumes:
-      - redmine:/usr/src/redmine
-
-  database:
-    image: mysql:5
-    volumes:
-      - database:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=db
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
-
-  backup:
-    image: b3vis/borgmatic
-    volumes:
-      - database:/data/database
-      - redmine:/data/redmine
-      - ssh:/root/.ssh/
-    environment:
-      - BORG_PASSPHRASE
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
-    configs:
-      - source: borgmatic-config-redmine
-        target: /etc/borgmatic.d/config.yaml
-
-configs:
-  borgmatic-config-redmine:
-    external: true
 
 networks:
   caddy:
@@ -51,4 +58,8 @@ volumes:
   redmine: {}
   database: {}
   ssh:
+    external: true
+
+configs:
+  borgmatic-config-redmine:
     external: true

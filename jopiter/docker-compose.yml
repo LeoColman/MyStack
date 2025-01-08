@@ -1,5 +1,33 @@
+# dclint disable require-project-name-field
 
 services:
+  borgmatic:
+    image: b3vis/borgmatic:1.9
+    volumes:
+      - postgres-data:/data/database
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-jopiter
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
+  jopiter:
+    image: jopiterapp/jopiter-backend:2.4.6
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jopiter
+    networks:
+      - default
+      - caddy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
+    labels:
+      caddy: persephone.jopiter.app
+      caddy.reverse_proxy: "{{upstreams 5000}}"
+
   postgres:
     image: postgres:16
     volumes:
@@ -10,33 +38,11 @@ services:
       POSTGRES_DB: "jopiter"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U jopiter" ]
-      
-  jopiter:
-    image: jopiterapp/jopiter-backend:latest
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jopiter
-    networks:
-      - default
-      - caddy
-    labels:
-      caddy: persephone.jopiter.app
-      caddy.reverse_proxy: "{{upstreams 5000}}"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
 
-  borgmatic:
-    image: b3vis/borgmatic
-    volumes:
-      - postgres-data:/data/database
-      - ssh:/root/.ssh/
-    environment:
-      - BORG_PASSPHRASE
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
-    configs:
-      - source: borgmatic-config-jopiter
-        target: /etc/borgmatic.d/config.yaml
+networks:
+  default:
+  caddy:
+    external: true
 
 volumes:
   postgres-data:
@@ -45,9 +51,4 @@ volumes:
 
 configs:
   borgmatic-config-jopiter:
-    external: true
-
-networks:
-  default:
-  caddy:
     external: true

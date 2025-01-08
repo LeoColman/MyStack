@@ -22,7 +22,7 @@ services:
       - /dev/net/tun:/dev/net/tun
 
   opentracker:
-    image: lednerb/opentracker-docker:a055447e4445
+    image: lednerb/opentracker-docker:latest@SHA256:a055447e44450036b7b2a923618b12d4ecf1eff3c894e969cc2c42f466b2c6f6
     environment:
       - PUID=1000
       - PGID=1000

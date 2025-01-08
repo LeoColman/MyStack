@@ -8,7 +8,7 @@ services:
       timeout: 10s
       retries: 3
     depends_on:
-      - otel_collector
+      - traces_collector
       - jaeger
     networks:
       - caddy
@@ -42,7 +42,7 @@ services:
       caddy.basic_auth: "* bcrypt"
       caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
-  otel_collector:
+  traces_collector:
     image: otel/opentelemetry-collector-contrib:latest
     command: ["--config=/etc/otelcol/config.yaml"]
     depends_on:
@@ -73,7 +73,7 @@ services:
         scrape_configs:
           - job_name: 'aggregated-trace-metrics'
             static_configs:
-              - targets: ['otel_collector:8889']
+              - targets: ['traces_collector:8889']
         " > /etc/prometheus/prometheus.yml && \
         /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
 

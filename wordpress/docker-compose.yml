@@ -1,4 +1,18 @@
+# dclint disable require-project-name-field
 services:
+  borgmatic:
+    image: b3vis/borgmatic:1.9
+    volumes:
+      - database:/data/database
+      - wordpress:/data/wordpress
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-wordpress
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
   database:
     image: mariadb:10
     volumes:
@@ -9,8 +23,18 @@ services:
       - MARIADB_PASSWORD
       - MARIADB_ROOT_PASSWORD
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
-      
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MARIADB_ROOT_PASSWORD}"
+        ]
+
   wordpress:
     image: wordpress:6
     depends_on:
@@ -25,28 +49,11 @@ services:
     networks:
       - default
       - caddy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
     labels:
       caddy: leonardo.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost" ]
-
-  borgmatic:
-    image: b3vis/borgmatic
-    volumes:
-      - database:/data/database
-      - wordpress:/data/wordpress
-      - ssh:/root/.ssh/
-    environment:
-      - BORG_PASSPHRASE
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
-    configs:
-      - source: borgmatic-config-wordpress
-        target: /etc/borgmatic.d/config.yaml
-
-configs:
-  borgmatic-config-wordpress:
-    external: true
 
 networks:
   caddy:
@@ -56,4 +63,8 @@ volumes:
   database: {}
   wordpress: {}
   ssh:
+    external: true
+
+configs:
+  borgmatic-config-wordpress:
     external: true

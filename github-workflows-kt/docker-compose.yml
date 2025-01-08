@@ -1,27 +1,40 @@
+name: "github-workflows-kt"
 
 services:
   github-workflows-kts:
-    image: krzema12/github-workflows-kt-jit-binding-server:latest
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' -L http://localhost:8080/status | grep -q 200" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line
     depends_on:
-      - traces_collector
       - jaeger
+      - traces_collector
+    environment:
+      - GITHUB_TOKEN
     networks:
       - caddy
       - default
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -o /dev/null -w '%{http_code}' -L
+            http://localhost:8080/status | grep -q 200"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     labels:
       caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
       dozzle: "yes"
-    environment:
-      - GITHUB_TOKEN
 
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1
+    environment:
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
+      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
+      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
+      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
     networks:
       - caddy
       - default
@@ -31,41 +44,18 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
-    environment:
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
-      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
-      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
-      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
     labels:
       caddy: jaeger.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 16686}}"
       caddy.basic_auth: "* bcrypt"
-      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
-
-  traces_collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    command: ["--config=/etc/otelcol/config.yaml"]
-    container_name: traces_collector
-    depends_on:
-      - jaeger
-    networks:
-      default:
-      caddy:
-        aliases: [ traces_collector ]
-    configs:
-      - source: otel_config
-        target: /etc/otelcol/config.yaml
+      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0\
+        ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.1.0
     networks:
       - caddy
       - default
-    labels:
-      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9090}}"
     entrypoint:
       - /bin/sh
       - -c
@@ -81,20 +71,23 @@ services:
               - targets: ['traces_collector:8889']
         " > /etc/prometheus/prometheus.yml && \
         /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
+    labels:
+      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9090}}"
 
-#  dozzle:
-#    image: amir20/dozzle:latest
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#    networks:
-#      - caddy
-#    labels:
-#      caddy: logs.github-workflows-kt-bindings.colman.com.br
-#      caddy.reverse_proxy: "{{upstreams 8080}}"
-#    environment:
-#      DOZZLE_AUTH_PROVIDER: simple
-#      DOZZLE_FILTER: label=dozzle=yes
-
+  traces_collector:
+    image: otel/opentelemetry-collector-contrib:0.117.0
+    container_name: traces_collector
+    depends_on:
+      - jaeger
+    configs:
+      - source: otel_config
+        target: /etc/otelcol/config.yaml
+    networks:
+      default:
+      caddy:
+        aliases: [ traces_collector ]
+    command: [ "--config=/etc/otelcol/config.yaml" ]
 
 networks:
   caddy:

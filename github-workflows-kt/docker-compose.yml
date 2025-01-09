@@ -68,6 +68,7 @@ services:
           - job_name: 'aggregated-trace-metrics'
             static_configs:
               - targets: ['traces_collector:8889']
+              - targets: ['traces_collector:8888']
         " > /etc/prometheus/prometheus.yml && \
         /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
     labels:

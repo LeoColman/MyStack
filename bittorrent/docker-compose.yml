@@ -30,6 +30,8 @@ services:
       - '0.0.0.0:6969:6969/tcp'
     networks:
       - caddy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6969"]
 
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent:5.0.3
@@ -42,6 +44,8 @@ services:
       - TZ=America/Sao_Paulo
       - WEBUI_PORT=6011
     network_mode: "service:gluetun"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:6011" ]
 
 networks:
   caddy:

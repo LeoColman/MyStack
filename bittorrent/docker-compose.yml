@@ -1,5 +1,4 @@
-name: bittorrent
-
+# dclint disable require-project-name-field
 services:
   gluetun:
     image: qmcgaw/gluetun:v3

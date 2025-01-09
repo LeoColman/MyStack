@@ -31,8 +31,8 @@ services:
     networks:
       - caddy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6969"]
-
+      test: ["CMD", "nc", "-z", "localhost", "6969"]
+      
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent:5.0.3
     volumes:

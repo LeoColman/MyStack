@@ -66,7 +66,7 @@ services:
       caddy: "postal.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 5000}}"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://0.0.0.0:5000/" ]
+      test: [ "CMD", "curl", "-f", "http://0.0.0.0:5000/login" ]
   
 
   worker:

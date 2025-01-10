@@ -28,8 +28,8 @@ services:
     labels:
       caddy: collabora.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9980}}"
-    cap_add:
-      - MKNOD
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9980/" ]
 
   cron:
     image: nextcloud:apache
@@ -39,8 +39,11 @@ services:
     volumes:
       - nextcloud:/var/www/html
     entrypoint: /cron.sh
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost/status.php" ]
+  
   mariadb:
-    image: mariadb:10.7
+    image: mariadb:lts
     volumes:
       - database:/var/lib/mysql
     environment:
@@ -48,6 +51,8 @@ services:
       - MYSQL_PASSWORD
       - MARIADB_ROOT_PASSWORD
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
 
   nextcloud:
     image: nextcloud:apache
@@ -90,9 +95,13 @@ services:
       caddy.rewrite_1: /.well-known/caldav /remote.php/dav
     cap_add:
       - SYS_ADMIN
+    healthcheck:
+      test: curl -sSf 'http://localhost/status.php' | grep '"installed":true' | grep '"maintenance":false' | grep '"needsDbUpgrade":false' || exit 1
 
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
 networks:
   caddy:

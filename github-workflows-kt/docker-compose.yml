@@ -8,7 +8,6 @@ services:
       - otel-collector
     networks:
       - caddy
-      - default
     healthcheck:
       test:
         [

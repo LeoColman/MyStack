@@ -2,9 +2,6 @@
 services:
   github-workflows-kts:
     image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line
-    depends_on:
-      - jaeger
-      - traces_collector
     environment:
       - GITHUB_TOKEN
     networks:
@@ -17,77 +14,21 @@ services:
           "curl -s -o /dev/null -w '%{http_code}' -L
             http://localhost:8080/status | grep -q 200"
         ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     labels:
-      caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
+      caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
-      dozzle: "yes"
-
-  jaeger:
-    image: jaegertracing/all-in-one:1
-    environment:
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
-      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
-      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
-      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
+  
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
     networks:
-      - caddy
-      - default
-    healthcheck:
-      test: [ "CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    labels:
-      caddy: jaeger.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 16686}}"
-      caddy.basic_auth: "* bcrypt"
-      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0\
-        ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
-
-  prometheus:
-    image: prom/prometheus:v3.1.0
-    networks:
-      - caddy
-      - default
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        echo "
-        global:
-          scrape_interval:     15s
-          evaluation_interval: 15s
-
-        scrape_configs:
-          - job_name: 'aggregated-trace-metrics'
-            static_configs:
-              - targets: ['traces_collector:8889']
-              - targets: ['traces_collector:8888']
-        " > /etc/prometheus/prometheus.yml && \
-        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
-    labels:
-      caddy: prometheus.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9090}}"
-
-  traces_collector:
-    image: otel/opentelemetry-collector-contrib:0.117.0
-    container_name: traces_collector
-    depends_on:
-      - jaeger
+      caddy:
+        - aliases:
+            - traces_collector
+    command: [ "--config", "/etc/otel-config.yaml" ]
     configs:
       - source: otel_config
-        target: /etc/otelcol/config.yaml
-    networks:
-      default:
-      caddy:
-        aliases: [ traces_collector ]
-    command: [ "--config=/etc/otelcol/config.yaml" ]
+        target: /etc/otel-config.yaml
+
 
 networks:
   caddy:

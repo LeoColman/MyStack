@@ -7,8 +7,6 @@ services:
     networks:
       - caddy
       - default
-    depends_on:
-      - otel-collector
     healthcheck:
       test:
         [
@@ -24,12 +22,18 @@ services:
     image: otel/opentelemetry-collector:latest
     networks:
       caddy:
-        aliases: [ traces_collector ]
-    command: [ "--config", "/etc/otel/otel-config.yaml" ]
-    volumes:
-      - ./otel_config.yaml:/etc/otel/otel-config.yaml
+        aliases:
+         - traces_collector
+    command: [ "--config", "/etc/otel-config.yaml" ]
+    configs:
+      - source: otel_config
+        target: /etc/otel-config.yaml
 
 
 networks:
   caddy:
+    external: true
+
+configs:
+  otel_config:
     external: true

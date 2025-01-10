@@ -52,8 +52,7 @@ services:
       - MARIADB_ROOT_PASSWORD
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     healthcheck:
-      test: ["CMD-SHELL", "mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1' || exit 1"]
-     
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 3306 || exit 1"]     
   nextcloud:
     image: nextcloud:apache
     depends_on:

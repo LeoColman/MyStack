@@ -26,8 +26,6 @@ services:
       caddy:
         aliases: [ traces_collector ]
     command: [ "--config", "/etc/otel-config.yaml" ]
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8888 || exit 1" ]
     configs:
       - source: otel_config
         target: /etc/otel-config.yaml

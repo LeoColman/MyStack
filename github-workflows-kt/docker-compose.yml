@@ -7,7 +7,6 @@ services:
     depends_on:
       - traces_collector
     networks:
-      - otel_network
       - caddy
     healthcheck:
       test:
@@ -22,9 +21,7 @@ services:
   
   traces_collector:
     image: otel/opentelemetry-collector:latest
-    container_name: traces_collector
     networks:
-      - otel_network
       - caddy
     command: [ "--config", "/etc/otel-config.yaml" ]
     configs:

@@ -90,8 +90,6 @@ services:
       caddy.header.Strict-Transport-Security: "max-age=15552000"
       caddy.rewrite_0: /.well-known/carddav /remote.php/dav
       caddy.rewrite_1: /.well-known/caldav /remote.php/dav
-    cap_add:
-      - SYS_ADMIN
     healthcheck:
       test: curl -sSf 'http://localhost/status.php' | grep '"installed":true' | grep '"maintenance":false' | grep '"needsDbUpgrade":false' || exit 1
 

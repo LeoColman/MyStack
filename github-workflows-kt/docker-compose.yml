@@ -22,6 +22,7 @@ services:
   
   otel-collector:
     image: otel/opentelemetry-collector:latest
+    container_name: traces_collector
     networks:
       caddy:
         aliases: [ traces_collector ]

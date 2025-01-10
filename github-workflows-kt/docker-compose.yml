@@ -19,7 +19,7 @@ services:
       caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
   
-  otel-collector:
+  traces_collector:
     image: otel/opentelemetry-collector:latest
     container_name: traces_collector
     networks:

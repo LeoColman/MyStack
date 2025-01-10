@@ -39,8 +39,6 @@ services:
     volumes:
       - nextcloud:/var/www/html
     entrypoint: /cron.sh
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost/status.php" ]
   
   mariadb:
     image: mariadb:lts

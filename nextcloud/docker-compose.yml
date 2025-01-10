@@ -52,8 +52,8 @@ services:
       - MARIADB_ROOT_PASSWORD
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     healthcheck:
-      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
-
+     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+  
   nextcloud:
     image: nextcloud:apache
     depends_on:

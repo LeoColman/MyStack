@@ -27,7 +27,7 @@ services:
         target: /etc/borgmatic.d/config.yaml
     environment:
       - BORG_PASSPHRASE
-      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+      - BACKUP_CRON=0 1 * * * # Remove whe        n https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   mariadb:
     image: mariadb:lts
@@ -49,6 +49,8 @@ services:
     command: postal smtp-server
     cap_add:
       - NET_BIND_SERVICE
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9091/health" ]
 
   web:
     image: ghcr.io/postalserver/postal:3.3.4
@@ -63,6 +65,9 @@ services:
     labels:
       caddy: "postal.colman.com.br"
       caddy.reverse_proxy: "{{upstreams 5000}}"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9090/health" ]
+  
 
   worker:
     image: ghcr.io/postalserver/postal:3.3.4
@@ -71,6 +76,8 @@ services:
     environment:
       <<: *postal
     command: postal worker
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9090/health" ]
 
 networks:
   caddy:

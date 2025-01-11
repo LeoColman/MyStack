@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   github-workflows-kts:
-    image: github-workflows-kt-jit-binding-server # dclint disable-line
+    image: krzema12/github-workflows-kt-jit-binding-server # dclint disable-line
     environment:
       - GITHUB_TOKEN
     depends_on:
@@ -9,7 +9,6 @@ services:
     networks:
       - caddy
       - default
-    healthcheck:
       test:
         [
           "CMD-SHELL",

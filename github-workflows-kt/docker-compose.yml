@@ -7,8 +7,10 @@ services:
     environment:
       - GITHUB_TOKEN
     networks:
-      - caddy
-      - default
+      caddy:
+      default:
+      static:
+        ipv4_address: 192.168.1.2 
     healthcheck:
       test:
         [
@@ -70,13 +72,14 @@ services:
         target: /etc/otel/otel-config.yaml
     networks:
       default:
+      static:
         ipv4_address: 192.168.1.4
     command: [ "--config", "/etc/otel/otel-config.yaml" ]
 
 networks:
   caddy:
     external: true
-  default:
+  static:
     ipam:
       config:
         - subnet: 192.168.1.0/24

@@ -38,6 +38,7 @@ services:
       - redis
     volumes:
       - nextcloud:/var/www/html
+      - /hdd/nextcloud-data/data:/var/www/html/data
     entrypoint: /cron.sh
   
   mariadb:

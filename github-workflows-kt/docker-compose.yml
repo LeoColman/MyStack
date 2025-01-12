@@ -10,7 +10,7 @@ services:
       caddy:
       default:
       static:
-        ipv4_address: 192.168.1.2 
+        ipv4_address: 10.0.14.2 
     healthcheck:
       test:
         [
@@ -73,7 +73,7 @@ services:
     networks:
       default:
       static:
-        ipv4_address: 192.168.1.4
+        ipv4_address: 10.0.14.4
     command: [ "--config", "/etc/otel/otel-config.yaml" ]
 
 networks:
@@ -82,7 +82,7 @@ networks:
   static:
     ipam:
       config:
-        - subnet: 192.168.1.0/24
+        - subnet: 10.0.14.0/24
 
 volumes:
   grafana_data:

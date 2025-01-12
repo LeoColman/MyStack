@@ -68,10 +68,10 @@ services:
     configs:
       - source: otel-config
         target: /etc/otel/otel-config.yaml
-    command: [ "--config", "/etc/otel/otel-config.yaml" ]
     networks:
       default:
         ipv4_address: 192.168.1.4
+    command: [ "--config", "/etc/otel/otel-config.yaml" ]
 
 networks:
   caddy:
@@ -83,6 +83,7 @@ networks:
 
 volumes:
   grafana_data:
+
 
 configs:
   otel-config:

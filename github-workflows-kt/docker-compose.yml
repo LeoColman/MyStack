@@ -71,7 +71,7 @@ services:
     command: [ "--config", "/etc/otel/otel-config.yaml" ]
     networks:
       default:
-        - ipv4_address: 192.168.1.4
+        ipv4_address: 192.168.1.4
 
 networks:
   caddy:

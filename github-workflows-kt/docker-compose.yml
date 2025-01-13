@@ -8,7 +8,7 @@ services:
       - GITHUB_TOKEN
     networks:
       - caddy
-      - default
+      - otel
     healthcheck:
       test:
         [
@@ -32,7 +32,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
     networks:
       - caddy
-      - default
+      - otel
     labels:
       caddy: grafana.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -46,7 +46,7 @@ services:
       - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
     networks:
       - caddy
-      - default
+      - otel
     labels:
       caddy: jaeger.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 16686}}"
@@ -62,6 +62,8 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
+    networks:
+      - otel
 
   traces_collector:
     image: otel/opentelemetry-collector-contrib:0.117.0
@@ -69,10 +71,14 @@ services:
       - source: otel-config
         target: /etc/otel/otel-config.yaml
     command: [ "--config", "/etc/otel/otel-config.yaml" ]
+    networks:
+      otel:
+        aliases: [ "traces_collector" ]
 
 networks:
   caddy:
     external: true
+  otel:
 
 volumes:
   grafana_data:

@@ -5,6 +5,8 @@ services:
     image: technitium/dns-server:latest
     # For DHCP deployments, use "host" network mode and remove all the port mappings, including the ports array by commenting them
     # network_mode: "host"
+    networks:
+      - caddy
     labels:
       caddy: dns.colman.com.br
       caddy.reverse_proxy: "{{upstreams 5380}}"

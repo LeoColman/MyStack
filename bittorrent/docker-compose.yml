@@ -44,6 +44,8 @@ services:
       - TZ=America/Sao_Paulo
       - WEBUI_PORT=6011
     network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:6011" ]
 

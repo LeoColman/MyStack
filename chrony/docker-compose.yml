@@ -5,4 +5,4 @@ services:
       NTP_SERVERS: "ntp.br"
       TZ: "America/Sao_Paulo"
     ports:
-      - 123:123/udp
+      - "123:123/udp"

@@ -75,17 +75,12 @@ services:
       otel:
         aliases: [ "traces_collector" ]
     
-  dummy-metrics-generator:
-    image: otel/opentelemetry-collector-contrib:0.117.0
-    command: >
-      --metrics-generator-enabled
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://traces_collector:4317
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=dummy-metrics-generator
+  otelgen:
+    image: ghcr.io/krzko/otelgen:latest
+    command: ["--otel-exporter-otlp-endpoint", "otel-collector:4317", "--insecure", "metrics", "gauge"]
     networks:
-      otel:
-    depends_on:
-      - traces_collector  
+      - otel
+  
 
 networks:
   caddy:

@@ -9,7 +9,6 @@ services:
     networks:
       caddy:
       otel:
-        ipv4_address: 192.168.19.6
     healthcheck:
       test:
         [
@@ -34,7 +33,6 @@ services:
     networks:
       caddy:
       otel:
-        ipv4_address: 192.168.19.5
     labels:
       caddy: grafana.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -49,7 +47,6 @@ services:
     networks:
       caddy:
       otel:
-        ipv4_address: 192.168.19.4
     labels:
       caddy: jaeger.github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 16686}}"
@@ -67,7 +64,6 @@ services:
       - "--web.enable-remote-write-receiver"
     networks:
       otel:
-        ipv4_address: 192.168.19.3
 
   traces_collector:
     image: otel/opentelemetry-collector-contrib:0.117.0
@@ -78,16 +74,13 @@ services:
     networks:
       otel:
         aliases: [ "traces_collector" ]
-        ipv4_address: 192.168.19.2
     
 
 networks:
   caddy:
     external: true
   otel:
-    ipam:
-      config:
-        - subnet: 192.168.19.0/24
+
 volumes:
   grafana_data:
 

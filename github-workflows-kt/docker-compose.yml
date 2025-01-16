@@ -1,6 +1,6 @@
 # dclint disable require-project-name-field
 services:
-  github-workflows-kts:
+  github-workflows-kt:
     image: krzema12/github-workflows-kt-jit-binding-server # dclint disable-line
     depends_on:
       - traces_collector

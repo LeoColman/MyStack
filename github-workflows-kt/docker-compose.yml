@@ -6,6 +6,7 @@ services:
       - traces_collector
     environment:
       - GITHUB_TOKEN
+      - KTOR_LOG_LEVEL=DEBUG
     networks:
       caddy:
       otel:

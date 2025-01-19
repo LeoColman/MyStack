@@ -6,6 +6,15 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
+  
+  # Prometheus receiver that scrapes the Collector’s own internal telemetry endpoint (port 8888)
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otel-collector-internal'
+          scrape_interval: 5s
+          static_configs:
+            - targets: [ '0.0.0.0:8888' ]  # Scrape the Collector's self-telemetry
 
 processors:
   batch:
@@ -23,14 +32,20 @@ exporters:
     endpoint: 0.0.0.0:8889
 
 service:
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
+    logs:
+      level: debug  # Set log level to debug
+
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/jaeger]
+      exporters: [otlp/jaeger, debug]
       
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, prometheus]
       processors: [batch]
       exporters: [debug, prometheus]
       

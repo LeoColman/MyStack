@@ -38,6 +38,7 @@ services:
     volumes:
       - qbittorrent-config:/config
       - qbittorrent-downloads:/downloads
+      - /hdd/torrents:/downloads/hdd
     environment:
       - PUID=1000
       - PGID=1000

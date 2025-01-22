@@ -37,8 +37,7 @@ services:
     image: ghcr.io/linuxserver/qbittorrent:5.0.3
     volumes:
       - qbittorrent-config:/config
-      - qbittorrent-downloads:/downloads
-      - /hdd/torrents:/downloads/hdd
+      - /hdd/torrents:/downloads/
     environment:
       - PUID=1000
       - PGID=1000
@@ -55,6 +54,5 @@ networks:
     external: true
 
 volumes:
-  qbittorrent-downloads:
   qbittorrent-config:
   gluetun:

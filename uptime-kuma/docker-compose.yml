@@ -18,6 +18,8 @@ services:
       - kuma-data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+    networks:
+      - caddy
     labels:
       caddy: kuma.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3001}}"

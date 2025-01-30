@@ -13,7 +13,8 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
   
   disk-check:
-    image: alpine:latest
+    image: ubuntu:latest
+    # If you need to mount the host filesystem read-only:
     volumes:
       - /:/host:ro
     environment:
@@ -22,27 +23,28 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command: >
       set -x; set +e;
-      apk add --no-cache curl
-  
-      # Write actual values into the script right now,
-      # so the script does not need external env variables.
-      cat <<EOF > /usr/local/bin/disk-check.sh
+
+      # 1) Update and install dependencies
+      apt-get update && apt-get install -y cron curl
+
+      # 2) Create script
+      cat <<'EOF' > /usr/local/bin/disk-check.sh
       #!/bin/sh
-      THRESHOLD=${THRESHOLD}
-      TOKEN=${TOKEN}
-  
-      USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
-  
-      if [ "\$USAGE" -gt "\$THRESHOLD" ]; then
-        curl -fsS -X POST "http://uptime-kuma:3001/api/push/\$TOKEN"
+      # We rely on environment variables passed inline in cron for THRESHOLD & TOKEN
+      USAGE=$(df /host | awk 'NR==2 {print $5}' | tr -d '%')
+      if [ "$USAGE" -gt "$THRESHOLD" ]; then
+        curl -fsS -X POST "http://uptime-kuma:3001/api/push/$TOKEN"
       fi
       EOF
-  
       chmod +x /usr/local/bin/disk-check.sh
-      echo "*/5 * * * * /usr/local/bin/disk-check.sh" | crontab -
-      crond -f
 
-    restart: always
+      # 3) Add cron job that includes environment variables inline
+      echo "*/5 * * * * THRESHOLD=$THRESHOLD TOKEN=$TOKEN /usr/local/bin/disk-check.sh" | crontab -
+
+      # 4) Start cron in foreground
+      #    On Ubuntu, the command is just `cron -f`
+      cron -f
+
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine
     volumes:

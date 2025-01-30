@@ -14,35 +14,37 @@ services:
   
   disk-check:
     image: alpine:latest
-    # Mount root in read-only mode
     volumes:
       - /:/host:ro
     environment:
-      - TOKEN        # supply this at runtime or in a .env
+      - TOKEN
       - THRESHOLD=75
     entrypoint: ["/bin/sh", "-c"]
     command: >
-      set -e &&
-      apk add --no-cache curl &&
+      # Turn on command echo (debug), but disable immediate exit on error
+      set -x; set +e;
 
-      # Write the disk-check script
+      # 1) Install curl
+      apk add --no-cache curl
+
+      # 2) Create script
       cat <<'EOF' > /usr/local/bin/disk-check.sh
       #!/bin/sh
       THRESHOLD=$THRESHOLD
       USAGE=$(df /host | awk 'NR==2 {print $5}' | tr -d '%')
 
-      # Alert if usage EXCEEDS the threshold
-      if [ $USAGE -gt $THRESHOLD ]; then
+      if [ "$USAGE" -gt "$THRESHOLD" ]; then
         curl -fsS -X POST "http://uptime-kuma:3001/api/push/$TOKEN"
       fi
       EOF
-      chmod +x /usr/local/bin/disk-check.sh &&
+      chmod +x /usr/local/bin/disk-check.sh
 
-      # Add a cron job (every 5 minutes)
-      echo "*/5 * * * * /usr/local/bin/disk-check.sh" | crontab - &&
+      # 3) Add cron job
+      echo "*/5 * * * * /usr/local/bin/disk-check.sh" | crontab -
 
-      # Run cron in the foreground to keep container running
+      # 4) Start cron in foreground
       crond -f
+    restart: always
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine
     volumes:

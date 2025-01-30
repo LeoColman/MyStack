@@ -12,6 +12,38 @@ services:
       - BORG_PASSPHRASE
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
   
+  disk-check:
+    image: alpine:latest
+    volumes:
+      - /:/host:ro 
+    environment:
+      - TOKEN
+      - THRESHOLD=75
+    networks:
+      - default
+    command: |
+      sh -c '
+      # Install dependencies
+      apk add --no-cache curl &&
+      
+      # Create disk check script
+      cat <<EOF > /usr/bin/disk-check.sh
+      #!/bin/sh
+      THRESHOLD=\$${THRESHOLD}
+      USAGE=\$$(df --output=pcent /host | tr -dc "0-9")
+      if [ \$$USAGE -lt \$$THRESHOLD ]; then
+        curl -fsS -X POST "http://uptime-kuma:3001/api/push/\$${TOKEN}"
+      fi
+      EOF
+      chmod +x /usr/bin/disk-check.sh &&
+      
+      # Add cron job (every 5 minutes)
+      echo "*/5 * * * * /usr/bin/disk-check.sh" >> /etc/crontabs/root &&
+      
+      # Start cron
+      crond -f
+      '
+  
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine
     volumes:
@@ -20,6 +52,7 @@ services:
     restart: unless-stopped
     networks:
       - caddy
+      - default
     labels:
       caddy: kuma.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3001}}"

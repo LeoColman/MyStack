@@ -7,7 +7,7 @@ services:
       caddy: netdata.ritalee.colman.com.br
       caddy.reverse_proxy: "{{upstreams 19999}}"
       caddy.basic_auth: "* bcrypt"
-      caddy.basic_auth.admin: "$2a$14$XGas2h0M7INZWb2qEBoDjOC7t1sLcPEAph8BHOUsDSXtSmz13N9hm"
+      caddy.basic_auth.admin: "$2y$10$Tyhmht5.E2svQOoHjuFEbuf3/IY8oQCY62eaC6oiOYqcdXzLNIVay"
     volumes:
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro

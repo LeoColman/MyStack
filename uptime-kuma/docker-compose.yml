@@ -20,7 +20,7 @@ services:
     environment:
       - TOKEN
       - THRESHOLD=75
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: ["/bin/bash", "-c"]
     command: |
       echo "=== [DEBUG] Starting container entrypoint ==="
       echo "=== [DEBUG] OS details ==="

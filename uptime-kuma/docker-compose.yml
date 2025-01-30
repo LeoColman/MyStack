@@ -22,7 +22,6 @@ services:
       - THRESHOLD=75
     entrypoint: ["/bin/sh", "-c"]
     command: |
-      set -uxo pipefail
       echo "=== [DEBUG] Starting container entrypoint ==="
       echo "=== [DEBUG] OS details ==="
       lsb_release -a || true

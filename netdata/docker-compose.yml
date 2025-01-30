@@ -4,7 +4,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: netadata.ritalee.colman.com.br
+      caddy: netdata.ritalee.colman.com.br
       caddy.reverse_proxy: "{{upstreams 19999}}"
     volumes:
       - /etc/passwd:/host/etc/passwd:ro

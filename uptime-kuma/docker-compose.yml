@@ -13,7 +13,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
   
   disk-check:
-    image: ubuntu:latest
+    image: ubuntu:24.04
     # If you need to mount the host filesystem read-only:
     volumes:
       - /:/host:ro

@@ -17,39 +17,40 @@ services:
     volumes:
       - /:/host:ro
     environment:
-      - TOKEN     # Ensure you supply this at runtime or in .env
+      - TOKEN
       - THRESHOLD=75
-    networks:
-      - default
-    command: |
+    command: >
       sh -c "
-      # Install curl
-      apk add --no-cache curl &&
-
-      # Create disk check script
-      cat <<EOF > /usr/bin/disk-check.sh
-      #!/bin/sh
-      THRESHOLD=\$THRESHOLD
-      # Grab the disk usage percentage for /host (the mapped root)
-      USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
+        # Install curl
+        apk add --no-cache curl &&
       
-      if [ \$USAGE -gt \$THRESHOLD ]; then
-        curl -fsS -X POST \"http://uptime-kuma:3001/api/push/\$TOKEN\"
-      fi
-      EOF
-
-      # Make our script executable
-      chmod +x /usr/bin/disk-check.sh &&
-
-      # Add a cron job to run every 5 minutes
-      echo '*/5 * * * * /usr/bin/disk-check.sh' >> /etc/crontabs/root &&
-
-      # Start cron in the foreground
-      crond -f
+        # Create disk-check script
+        cat <<'EOF' > /usr/bin/disk-check.sh
+        #!/bin/sh
+      
+        # We'll expand these at runtime rather than now
+        THRESHOLD=\$THRESHOLD
+        USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
+      
+        # Usually, alert if usage exceeds threshold
+        if [ \$USAGE -gt \$THRESHOLD ]; then
+          curl -fsS -X POST \"http://uptime-kuma:3001/api/push/\$TOKEN\"
+        fi
+        EOF
+      
+        # Make the script executable
+        chmod +x /usr/bin/disk-check.sh &&
+      
+        # Add cron entry (every 5 minutes)
+        echo '*/5 * * * * /usr/bin/disk-check.sh' >> /etc/crontabs/root &&
+      
+        # Run cron in foreground
+        crond -f
       "
-
-  
-  uptime-kuma:
+    
+    
+    
+    uptime-kuma:
     image: louislam/uptime-kuma:1-alpine
     volumes:
       - kuma-data:/app/data

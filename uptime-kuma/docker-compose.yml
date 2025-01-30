@@ -22,66 +22,8 @@ services:
       - THRESHOLD=75
     entrypoint: ["/bin/bash", "-c"]
     command: |
-      echo "=== [DEBUG] Starting container entrypoint ==="
-      echo "=== [DEBUG] OS details ==="
-      lsb_release -a || true
-      uname -a
-
-      echo "=== [DEBUG] Environment Variables ==="
-      env | sort
-
-      echo "=== [DEBUG] Installing dependencies (cron, curl, rsyslog) ==="
-      apt-get update
-      apt-get install -y cron curl rsyslog
-
-      echo "=== [DEBUG] Creating spool directory if missing ==="
-      mkdir -p /var/spool/cron/crontabs
-
-      echo "=== [DEBUG] Creating /usr/local/bin/disk-check.sh script ==="
-      cat << 'EOF' > /usr/local/bin/disk-check.sh
-      #!/bin/bash
-      set -euxo pipefail  # Extra debug flags in the script itself
-
-      echo "=== [disk-check.sh] Running disk usage check ==="
-      echo "=== [disk-check.sh] THRESHOLD=$THRESHOLD, TOKEN=$TOKEN ==="
-
-      USAGE=$(df /host | awk 'NR==2 {print $5}' | tr -d '%')
-      echo "=== [disk-check.sh] Current usage on /host: $USAGE% ==="
-
-      if [ "$USAGE" -gt "$THRESHOLD" ]; then
-          echo "=== [disk-check.sh] Usage is above threshold ($THRESHOLD), sending request ==="
-          # Replace http://uptime-kuma:3001 with your actual endpoint
-          curl -fsS -X POST "http://uptime-kuma:3001/api/push/$TOKEN" || {
-            echo "=== [disk-check.sh] Curl failed ==="
-            exit 1
-          }
-      else
-          echo "=== [disk-check.sh] Usage ($USAGE) <= THRESHOLD ($THRESHOLD), no request sent ==="
-      fi
-      EOF
-      chmod +x /usr/local/bin/disk-check.sh
-
-      echo "=== [DEBUG] Creating root crontab entry ==="
-      # Here we inline the environment variables so Cron can see them
-      echo "*/5 * * * * THRESHOLD=$THRESHOLD TOKEN=$TOKEN /usr/local/bin/disk-check.sh >> /var/log/cron.log 2>&1" \
-        > /var/spool/cron/crontabs/root
-
-      # Give syslog a place to store logs
-      touch /var/log/cron.log
-      touch /var/log/syslog
-
-      echo "=== [DEBUG] Permissions on cron spool and logs ==="
-      ls -l /var/spool/cron/crontabs
-      ls -l /var/log/cron.log /var/log/syslog
-
-      echo "=== [DEBUG] Starting rsyslog service to capture cron logs ==="
-      service rsyslog start
-
-      echo "=== [DEBUG] Starting cron in foreground, logging to /var/log/syslog and /var/log/cron.log ==="
-      cron
-
-      echo "=== [DEBUG] Tail syslog and cron.log in the foreground to keep container alive ==="
-      tail -F /var/log/syslog /var/log/cron.log
+      echo "=== Hello from inside the container ==="
+      sleep 5
 
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine

@@ -13,6 +13,8 @@ services:
     labels:
       caddy: netdata.ritalee.colman.com.br
       caddy.reverse_proxy: "{{upstreams 19999}}"
+      caddy.basic_auth: "* bcrypt"
+      caddy.basic_auth.admin: "JDJhJDE0JERuRHJNQnhlS1dzdy9LMXZydjdEQi55TS5PeHlPM0s5anoyUUczTVY1MnY2cXZ6TER0VlVT"
     networks:
       - caddy
 

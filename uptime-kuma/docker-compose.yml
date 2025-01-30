@@ -12,37 +12,45 @@ services:
       - BORG_PASSPHRASE
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
   
+version: '3'
+
+services:
   disk-check:
     image: alpine:latest
     volumes:
-      - /:/host:ro 
+      - /:/host:ro
     environment:
-      - TOKEN
+      - TOKEN     # Ensure you supply this at runtime or in .env
       - THRESHOLD=75
     networks:
       - default
     command: |
-      sh -c '
-      # Install dependencies
+      sh -c "
+      # Install curl
       apk add --no-cache curl &&
-      
+
       # Create disk check script
       cat <<EOF > /usr/bin/disk-check.sh
       #!/bin/sh
-      THRESHOLD=\$${THRESHOLD}
-      USAGE=\$$(df /host | awk "NR==2 {print \$$5}" | tr -d "%") 
-      if [ \$$USAGE -lt \$$THRESHOLD ]; then
-        curl -fsS -X POST "http://uptime-kuma:3001/api/push/\$${TOKEN}"
+      THRESHOLD=\$THRESHOLD
+      # Grab the disk usage percentage for /host (the mapped root)
+      USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
+      
+      if [ \$USAGE -gt \$THRESHOLD ]; then
+        curl -fsS -X POST \"http://uptime-kuma:3001/api/push/\$TOKEN\"
       fi
       EOF
+
+      # Make our script executable
       chmod +x /usr/bin/disk-check.sh &&
-      
-      # Add cron job (every 5 minutes)
-      echo "*/5 * * * * /usr/bin/disk-check.sh" >> /etc/crontabs/root &&
-      
-      # Start cron
+
+      # Add a cron job to run every 5 minutes
+      echo '*/5 * * * * /usr/bin/disk-check.sh' >> /etc/crontabs/root &&
+
+      # Start cron in the foreground
       crond -f
-      '
+      "
+
   
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine

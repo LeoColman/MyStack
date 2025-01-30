@@ -21,31 +21,31 @@ services:
       - THRESHOLD=75
     command: >
       sh -c "
-      # Install curl
-      apk add --no-cache curl &&
+        # Install curl
+        apk add --no-cache curl &&
     
-      # Create disk-check script
-      cat <<'EOF' > /usr/bin/disk-check.sh
-      #!/bin/sh
+        # Create disk-check script
+        cat <<'EOF' > /usr/bin/disk-check.sh
+        #!/bin/sh
     
-      # We'll expand these at runtime rather than now
-      THRESHOLD=\$THRESHOLD
-      USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
+        # We'll expand these at runtime rather than now
+        THRESHOLD=\$THRESHOLD
+        USAGE=\$(df /host | awk 'NR==2 {print \$5}' | tr -d '%')
     
-      # Usually, alert if usage exceeds threshold
-      if [ \$USAGE -gt \$THRESHOLD ]; then
-        curl -fsS -X POST \"http://uptime-kuma:3001/api/push/\$TOKEN\"
-      fi
-      EOF
+        # Usually, alert if usage exceeds threshold
+        if [ \$USAGE -gt \$THRESHOLD ]; then
+          curl -fsS -X POST \"http://uptime-kuma:3001/api/push/\$TOKEN\"
+        fi
+        EOF
     
-      # Make the script executable
-      chmod +x /usr/bin/disk-check.sh &&
+        # Make the script executable
+        chmod +x /usr/bin/disk-check.sh &&
     
-      # Add cron entry (every 5 minutes)
-      echo '*/5 * * * * /usr/bin/disk-check.sh' >> /etc/crontabs/root &&
+        # Add cron entry (every 5 minutes)
+        echo '*/5 * * * * /usr/bin/disk-check.sh' >> /etc/crontabs/root &&
     
-      # Run cron in foreground
-      crond -f
+        # Run cron in foreground
+        crond -f
       "
   uptime-kuma:
     image: louislam/uptime-kuma:1-alpine

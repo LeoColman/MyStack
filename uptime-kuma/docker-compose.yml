@@ -30,7 +30,7 @@ services:
       cat <<EOF > /usr/bin/disk-check.sh
       #!/bin/sh
       THRESHOLD=\$${THRESHOLD}
-      USAGE=\$$(df --output=pcent /host | tr -dc "0-9")
+      USAGE=\$$(df -h /host | awk "/\// {print \$$5}" | tr -d "%")
       if [ \$$USAGE -lt \$$THRESHOLD ]; then
         curl -fsS -X POST "http://uptime-kuma:3001/api/push/\$${TOKEN}"
       fi

@@ -37,8 +37,6 @@ services:
     image: redmine:6
     depends_on:
       - database
-    volumes:
-      - redmine:/usr/src/redmine
     environment:
       - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD

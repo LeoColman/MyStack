@@ -34,7 +34,7 @@ services:
           "-p${MYSQL_ROOT_PASSWORD}"
         ]
   redmine:
-    image: redmine:5.1.6-alpine
+    image: redmine:6
     depends_on:
       - database
     volumes:

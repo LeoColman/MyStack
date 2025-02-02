@@ -21,6 +21,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE=redmine
+      - MYSQL_USER=redmine
 
   redmine:
     image: redmine:6
@@ -29,6 +30,7 @@ services:
     environment:
       - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD
+      - REDMINE_DB_USER=redmine
       - REDMINE_SECRET_KEY_BASE
     networks:
       - caddy

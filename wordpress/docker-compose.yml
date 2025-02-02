@@ -14,7 +14,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   database:
-    image: mariadb:11
+    image: mariadb:10
     volumes:
       - database:/var/lib/mysql
     environment:

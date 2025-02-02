@@ -20,6 +20,7 @@ services:
       - database:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD
+      - MYSQL_PASSWORD
       - MYSQL_DATABASE=redmine
       - MYSQL_USER=redmine
 
@@ -30,7 +31,7 @@ services:
     environment:
       - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD
-      - REDMINE_DB_USER=redmine
+      - REDMINE_DB_USERNAME=redmine
       - REDMINE_SECRET_KEY_BASE
     networks:
       - caddy

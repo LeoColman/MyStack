@@ -15,7 +15,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   database:
-    image: mysql:5.7
+    image: mysql:8.0
     volumes:
       - database:/var/lib/mysql
     environment:

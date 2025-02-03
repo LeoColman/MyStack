@@ -10,6 +10,8 @@ services:
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY
       - WIREGUARD_ADDRESSES
+      - DNS_ADDRESS
+      - DOT
     networks:
       - caddy
     labels:

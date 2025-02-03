@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   gluetun:
-    image: qmcgaw/gluetun:v3
+    image: qmcgaw/gluetun:v3.40
     volumes:
       - gluetun:/gluetun
     environment:

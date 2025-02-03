@@ -13,6 +13,7 @@ services:
       - DNS_ADDRESS
     networks:
       - caddy
+      - default
     labels:
       caddy: qbittorrent.colman.com.br
       caddy.reverse_proxy: "{{upstreams 6011}}"

@@ -11,6 +11,7 @@ services:
       - WIREGUARD_PRIVATE_KEY
       - WIREGUARD_ADDRESSES
       - DNS_ADDRESS
+      - DOT_PROVIDERS=cloudflare,google,quad9
     networks:
       - caddy
     labels:

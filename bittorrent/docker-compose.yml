@@ -10,7 +10,8 @@ services:
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY
       - WIREGUARD_ADDRESSES
-      - DNS_ADDRESS
+    networks:
+      - caddy
     labels:
       caddy: qbittorrent.colman.com.br
       caddy.reverse_proxy: "{{upstreams 6011}}"

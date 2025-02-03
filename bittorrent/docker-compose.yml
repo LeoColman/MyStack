@@ -10,7 +10,7 @@ services:
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY
       - WIREGUARD_ADDRESSES
-      - DOT_PROVIDERS=cloudflare,google,quad9
+      - DOT_PROVIDERS=google,quad9
     networks:
       - caddy
     labels:

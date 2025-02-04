@@ -22,7 +22,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
 
   grafana:
-    image: grafana/grafana:11.5.0
+    image: grafana/grafana:11.5.1
     depends_on:
       - jaeger
       - prometheus

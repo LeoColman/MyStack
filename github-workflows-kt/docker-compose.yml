@@ -67,7 +67,7 @@ services:
       otel:
 
   traces_collector:
-    image: otel/opentelemetry-collector-contrib:0.118.0
+    image: otel/opentelemetry-collector-contrib:0.119.0
     configs:
       - source: otel-config
         target: /etc/otel/otel-config.yaml

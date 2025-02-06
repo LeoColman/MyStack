@@ -39,7 +39,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
   jaeger:
-    image: jaegertracing/jaeger:2.2.0
+    image: jaegertracing/jaeger:2.3.0
     environment:
       - METRICS_BACKEND=prometheus
       - PROMETHEUS_SERVER=http://prometheus:9090

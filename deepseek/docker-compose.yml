@@ -1,6 +1,6 @@
 services:
   deepseek:
-    image: ghcr.io/ggerganov/llama.cpp:latest
+    image: ghcr.io/abetlen/llama-cpp-python:latest
     volumes:
       - models:/models
     entrypoint: ["/bin/sh", "-c"]

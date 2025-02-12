@@ -2,97 +2,42 @@
 services:
   github-workflows-kt:
     image: krzema12/github-workflows-kt-jit-binding-server # dclint disable-line
-    depends_on:
-      - traces_collector
     environment:
       - GITHUB_TOKEN
-      - KTOR_LOG_LEVEL=DEBUG
     networks:
-      caddy:
-      otel:
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -s -o /dev/null -w '%{http_code}' -L
-            http://localhost:8080/status | grep -q 200"
-        ]
+      - prometheus
+      - caddy
     labels:
       caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
 
   grafana:
-    image: grafana/grafana:11.5.1
-    depends_on:
-      - jaeger
+    image: grafana/grafana:11.5.0
+    networks:
       - prometheus
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD
-      - GF_SECURITY_ADMIN_USER=admin
-    networks:
-      caddy:
-      otel:
+      - caddy
     labels:
-      caddy: grafana.colman.com.br
+      caddy: grafana.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
-
-  jaeger:
-    image: jaegertracing/jaeger:2.2.0
-    environment:
-      - METRICS_BACKEND=prometheus
-      - PROMETHEUS_SERVER=http://prometheus:9090
-      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
-      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
-    networks:
-      caddy:
-      otel:
-    labels:
-      caddy: jaeger.github-workflows-kt-bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 16686}}"
-      caddy.basic_auth: "* bcrypt"
-      caddy.basic_auth.admin: "JDJhJDEyJHdIU0tJTG45clVDcHQuUmdIN3dvd09ub2VqSDdhakkyL0\
-        ZkNnI5OS5XQ2NkTzdHSVNkYmpP"
 
   prometheus:
     image: prom/prometheus:v3.1.0
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
+    labels:
+      caddy: prometheus.bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9090}}"
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
     networks:
-      otel:
-
-  traces_collector:
-    image: otel/opentelemetry-collector-contrib:0.119.0
-    configs:
-      - source: otel-config
-        target: /etc/otel/otel-config.yaml
-    command: [ "--config", "/etc/otel/otel-config.yaml" ]
-    networks:
-      otel:
-        aliases: [ "traces_collector" ]
-    
-  otelgen:
-    image: ghcr.io/krzko/otelgen:latest
-    command: ["--otel-exporter-otlp-endpoint", "traces_collector:4317", "--insecure", "metrics", "gauge"]
-    networks:
-      - otel
-  
+      - prometheus
+      - caddy
 
 networks:
-  caddy:
-    external: true
-  otel:
-
-volumes:
-  grafana_data:
+  prometheus:
 
 configs:
-  otel-config:
-    file: otel-config.yaml
   prometheus:
-    file: prometheus.yml
+    external: true

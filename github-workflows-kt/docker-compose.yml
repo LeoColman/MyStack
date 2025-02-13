@@ -37,6 +37,8 @@ services:
 
 networks:
   prometheus:
+  caddy:
+    external: true
 
 configs:
   prometheus:

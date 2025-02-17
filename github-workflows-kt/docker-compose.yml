@@ -21,7 +21,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
   prometheus:
-    image: prom/prometheus:v3.1.0
+    image: prom/prometheus:v3.2.0
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml

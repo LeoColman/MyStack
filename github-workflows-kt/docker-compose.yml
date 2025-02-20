@@ -19,6 +19,8 @@ services:
     labels:
       caddy: grafana.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
+    volumes:
+      - grafana:/var/lib/grafana
 
   prometheus:
     image: prom/prometheus:v3.1.0
@@ -34,6 +36,12 @@ services:
     networks:
       - prometheus
       - caddy
+    volumes:
+      - prometheus:/prometheus
+
+volumes:
+  grafana:
+  prometheus:
 
 networks:
   prometheus:

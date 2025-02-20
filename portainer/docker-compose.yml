@@ -58,6 +58,8 @@ services:
       caddy.reverse_proxy: "{{upstreams 9000}}"
 
 networks:
+  default:
+    external: true
   agent_network:
     driver: overlay
     attachable: true

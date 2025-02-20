@@ -61,6 +61,7 @@ networks:
   agent_network:
     driver: overlay
     attachable: true
+    external: true
   caddy:
     external: true
 

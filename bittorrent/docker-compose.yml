@@ -1,18 +1,16 @@
 services:
-  
-  wireguard:
-    image: ghcr.io/linuxserver/wireguard:latest
-    volumes:
-      - wireguard-data:/config
+  gluetun:
+    image: qmcgaw/gluetun
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
     environment:
-      - PUID=1000       
-      - PGID=1000       
-      - TZ=America/Sao_Paulo
+      - WIREGUARD_PRIVATE_KEY
+      - WIREGUARD_ADDRESSES
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - SERVER_CITIES=Amsterdam
     networks:
       - caddy
     labels:
@@ -42,9 +40,9 @@ services:
       - PGID=1000
       - TZ=America/Sao_Paulo
       - WEBUI_PORT=6011
-    network_mode: "service:wireguard"
+    network_mode: "service:gluetun"
     depends_on:
-      - wireguard
+      - gluetun
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:6011" ]
 
@@ -54,4 +52,3 @@ networks:
 
 volumes:
   qbittorrent-config:
-  wireguard-data:

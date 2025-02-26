@@ -13,7 +13,7 @@ services:
       - WIREGUARD_ADDRESSES
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
-      - DNS_PLAINTEXT_ADDRESS=193.138.219.228
+      - DNS_PLAINTEXT_ADDRESS=10.8.0.1
 
     networks:
       - caddy

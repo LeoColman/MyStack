@@ -37,7 +37,7 @@ services:
       - grafana:/var/lib/grafana
 
   prometheus:
-    image: prom/prometheus:v3.1.0
+    image: prom/prometheus:v3.2.1
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml

@@ -9,8 +9,8 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      - OPENVPN_USER=
-      - OPENVPN_PASSWORD=
+      - OPENVPN_USER
+      - OPENVPN_PASSWORD
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=openvpn
       - DNS_PLAINTEXT_ADDRESS=193.138.219.228

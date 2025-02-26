@@ -3,6 +3,9 @@ services:
     image: qmcgaw/gluetun
     cap_add:
       - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
@@ -10,7 +13,7 @@ services:
       - WIREGUARD_ADDRESSES
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
-      - SERVER_CITIES=Amsterdam
+      - DOT_PROVIDERS=cloudflare
     networks:
       - caddy
     labels:

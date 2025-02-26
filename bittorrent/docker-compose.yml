@@ -14,6 +14,10 @@ services:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
       - DOT_PROVIDERS=cloudflare
+      - BLOCK_MALICIOUS=off
+      - BLOCK_SURVEILLANCE=off
+      - BLOCK_ADS=off
+
     networks:
       - caddy
     labels:

@@ -59,7 +59,6 @@ services:
 
 networks:
   default:
-    external: true
   agent_network:
     driver: overlay
     attachable: true

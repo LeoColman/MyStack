@@ -14,7 +14,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   database:
-    image: mariadb:10
+    image: mariadb:lts
     volumes:
       - database:/var/lib/mysql
     environment:
@@ -22,19 +22,8 @@ services:
       - MARIADB_USER=wordpress
       - MARIADB_PASSWORD
       - MARIADB_ROOT_PASSWORD
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-p${MARIADB_ROOT_PASSWORD}"
-        ]
-
+    restart: unless-stopped
+  
   wordpress:
     image: wordpress:6
     depends_on:
@@ -49,6 +38,7 @@ services:
     networks:
       - default
       - caddy
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost" ]
     labels:
@@ -60,8 +50,8 @@ networks:
     external: true
 
 volumes:
-  database: {}
-  wordpress: {}
+  database:
+  wordpress:
   ssh:
     external: true
 

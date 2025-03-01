@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   searxng:
-    image: searxng/searxng:2025.1.6-e35292618
+    image: searxng/searxng:2025.3.1-80f5fad16
     environment:
       SEARXNG_BASE_URL: "https://searxng.colman.com.br"
     networks:

@@ -1,7 +1,6 @@
 # dclint disable require-project-name-field
 services:
-
-  backup:
+  borgmatic:
     image: b3vis/borgmatic:1.9
     volumes:
       - database:/data/database
@@ -15,7 +14,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   database:
-    image: mysql:9.2
+    image: mysql:9
     volumes:
       - database:/var/lib/mysql
     environment:
@@ -29,10 +28,10 @@ services:
     depends_on:
       - database
     environment:
-      - REDMINE_DB_MYSQL=database
       - REDMINE_DB_PASSWORD
-      - REDMINE_DB_USERNAME=redmine
       - REDMINE_SECRET_KEY_BASE
+      - REDMINE_DB_MYSQL=database
+      - REDMINE_DB_USERNAME=redmine
     networks:
       - caddy
       - default

@@ -89,7 +89,6 @@ services:
       caddy.reverse_proxy: "{{upstreams}}"
       caddy.header: /*
       caddy.header.Strict-Transport-Security: "max-age=15552000"
-      caddy.header.X-Forwarded-For: "{http.request.remote}"
       caddy.rewrite_0: /.well-known/carddav /remote.php/dav
       caddy.rewrite_1: /.well-known/caldav /remote.php/dav
     healthcheck:

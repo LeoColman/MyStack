@@ -24,6 +24,8 @@ services:
 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:2.9.1
+    environment:
+      - LOG_LEVEL=DEBUG
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data
@@ -41,7 +43,6 @@ services:
         protocol: udp
     networks:
       caddy:
-        ipv4_address: 172.16.0.2 
     healthcheck:
       test: [ "CMD", "/bin/caddy", "version" ]
     deploy:

@@ -79,7 +79,7 @@ services:
       - MAIL_DOMAIN=colman.com.br
       - REDIS_HOST=redis
       - MYSQL_HOST=mariadb
-      - TRUSTED_PROXIES=95.217.46.244
+      - TRUSTED_PROXIES=0.0.0.0/0
       - NC_default_phone_region=BR
     networks:
       - caddy

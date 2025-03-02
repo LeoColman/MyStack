@@ -81,6 +81,7 @@ services:
       - MYSQL_HOST=mariadb
       - TRUSTED_PROXIES=0.0.0.0/0
       - NC_default_phone_region=BR
+      - APACHE_DISABLE_REWRITE_IP=1
     networks:
       - caddy
       - default

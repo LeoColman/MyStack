@@ -40,7 +40,8 @@ services:
         published: 443
         protocol: udp
     networks:
-      - caddy
+      caddy:
+        ipv4_address: 172.16.0.2 
     healthcheck:
       test: [ "CMD", "/bin/caddy", "version" ]
     deploy:

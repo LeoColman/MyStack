@@ -23,7 +23,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:2.9.1-alpine
+    image: lucaslorentz/caddy-docker-proxy:2.9.2-alpine
     environment:
       - LOG_LEVEL=DEBUG
     volumes:

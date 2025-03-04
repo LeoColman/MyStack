@@ -35,6 +35,8 @@ services:
     networks:
       - caddy
       - default
+    volumes:
+      - redmine:/usr/src/redmine
     labels:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"

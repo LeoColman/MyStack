@@ -16,7 +16,7 @@ services:
     image: openproject/openproject:15-slim
     restart: unless-stopped
     environment:
-      - OPENPROJECT_HTTPS=false
+      - OPENPROJECT_HTTPS=true
       - OPENPROJECT_HOST__NAME=openproject.colman.com.br
       - OPENPROJECT_HSTS=true
       - RAILS_CACHE_STORE=memcache

@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:13
+    restart: unless-stopped
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB=openproject
+    
+  memcached:
+    image: memcached
+    restart: unless-stopped
+    
+  openproject:
+    image: openproject/openproject:15-slim
+    restart: unless-stopped
+    environment:
+      - OPENPROJECT_HTTPS=false
+      - OPENPROJECT_HOST__NAME=localhost:8080
+      - OPENPROJECT_HSTS=true
+      - RAILS_CACHE_STORE=memcache
+      - OPENPROJECT_CACHE__MEMCACHE__SERVER=memcached:11211
+      - DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@postgres/openproject?pool=20&encoding=unicode&reconnect=true
+    volumes:
+      - openproject:/var/openproject/assets
+    command: "./docker/prod/web"
+    depends_on:
+      - memcached
+      - postgres
+      - seeder
+    labels:
+      caddy: openproject.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    
+  worker:
+    image: openproject/openproject:15-slim
+    restart: unless-stopped
+    environment:
+      - OPENPROJECT_HTTPS=true
+      - OPENPROJECT_HOST__NAME=localhost:8080
+      - OPENPROJECT_HSTS=true
+      - RAILS_CACHE_STORE=memcache
+      - OPENPROJECT_CACHE__MEMCACHE__SERVER=memcached:11211
+      - DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@postgres/openproject?pool=20&encoding=unicode&reconnect=true
+    volumes:
+      - openproject:/var/openproject/assets
+    command: "./docker/prod/worker"
+    depends_on:
+      - seeder
+      - postgres
+      - memcached
+    
+  seeder:
+    image: openproject/openproject:15-slim
+    restart: on-failure
+    environment:
+      - OPENPROJECT_HTTPS=true
+      - OPENPROJECT_HOST__NAME=localhost:8080
+      - OPENPROJECT_HSTS=true
+      - RAILS_CACHE_STORE=memcache
+      - OPENPROJECT_CACHE__MEMCACHE__SERVER=memcached:11211
+      - DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@postgres/openproject?pool=20&encoding=unicode&reconnect=true
+    volumes:
+      - openproject:/var/openproject/assets
+    command: "./docker/prod/seeder"
+    
+    
+volumes:
+  postgres:
+  openproject:

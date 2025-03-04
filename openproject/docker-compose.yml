@@ -25,6 +25,9 @@ services:
     volumes:
       - openproject:/var/openproject/assets
     command: "./docker/prod/web"
+    networks:
+      - default
+      - caddy
     depends_on:
       - memcached
       - postgres
@@ -69,3 +72,6 @@ services:
 volumes:
   postgres:
   openproject:
+networks:
+  caddy:
+    external: true

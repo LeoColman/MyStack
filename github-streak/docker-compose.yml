@@ -6,7 +6,6 @@ services:
       - TOKEN
     networks:
       - caddy
-    restart: unless-stopped
     labels:
       caddy: github-readme-streak-stats.colman.com.br
       caddy.reverse_proxy: "{{upstreams 9000}}"

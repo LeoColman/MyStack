@@ -1,0 +1,16 @@
+# dclint disable require-project-name-field
+services:
+  streak-stats:
+    image: qcdev/github-readme-streak-stats@sha25:6adf1d9b7c330e099fb9f28e1301eea1ec5c6f290106993bc541bc3bb3139685f
+    environment:
+      - TOKEN
+    networks:
+      - caddy
+    restart: unless-stopped
+    labels:
+      caddy: github-readme-streak-stats.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+
+networks:
+  caddy:
+    external: true

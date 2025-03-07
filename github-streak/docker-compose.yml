@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   streak-stats:
-    image: qcdev/github-readme-streak-stats@latest
+    image: qcdev/github-readme-streak-stats:latest
     environment:
       - TOKEN
     networks:

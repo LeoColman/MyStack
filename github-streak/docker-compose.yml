@@ -1,9 +1,8 @@
 # dclint disable require-project-name-field
 services:
   streak-stats:
-    image: qcdev/github-readme-streak-stats:latest
+    image: leocolman/github-readme-streak-stats:1.0.0
     environment:
-      - HTTPD_PREFIX=Listen 0.0.0.0:9000
       - TOKEN
     networks:
       - caddy

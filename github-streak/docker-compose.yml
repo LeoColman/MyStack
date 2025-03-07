@@ -3,6 +3,7 @@ services:
   streak-stats:
     image: qcdev/github-readme-streak-stats:latest
     environment:
+      - HTTPD_PREFIX=Listen 0.0.0.0:9000
       - TOKEN
     networks:
       - caddy

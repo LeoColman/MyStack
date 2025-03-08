@@ -22,7 +22,6 @@ services:
       - MARIADB_USER=wordpress
       - MARIADB_PASSWORD
       - MARIADB_ROOT_PASSWORD
-    restart: unless-stopped
   
   wordpress:
     image: wordpress:6
@@ -38,9 +37,6 @@ services:
     networks:
       - default
       - caddy
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost" ]
     labels:
       caddy: leonardo.colman.com.br
       caddy.reverse_proxy: "{{upstreams 80}}"

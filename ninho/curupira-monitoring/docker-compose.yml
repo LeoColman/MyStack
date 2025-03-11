@@ -1,19 +1,24 @@
 name: curupira-monitoring
 services:
-  prometheus:
-    image: prom/prometheus:latest
+  
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
     restart: always
-    ports:
-      - "9090:9090"
+    environment:
+      - INFLUXDB_DB=telegraf
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
+      - influxdb-data:/var/lib/influxdb
 
   telegraf:
     image: telegraf:latest
     restart: always
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
 
   grafana:
     image: grafana/grafana:latest
@@ -24,7 +29,9 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
     volumes:
       - grafana-data:/var/lib/grafana
+    depends_on:
+      - influxdb
 
 volumes:
-  prometheus-data:
+  influxdb-data:
   grafana-data:

@@ -5,7 +5,7 @@ services:
     image: influxdb:1.8
     restart: always
     environment:
-      - INFLUXDB_DB=telegraf
+      - INFLUXDB_DB=snmp
       - INFLUXDB_ADMIN_USER=admin
       - INFLUXDB_ADMIN_PASSWORD=admin
     volumes:
@@ -21,7 +21,6 @@ services:
       - MIBS=ALL  # Enable MIBs
       - TELEGRAF_SNMP_MIBS=/usr/share/snmp/mibs  # Set MIB directory
       - SNMP_MIB_DIRS=/usr/share/snmp/mibs  # Ensure MIBs are loaded
-      - INFLUXDB_DB=telegraf
     depends_on:
       - influxdb
 

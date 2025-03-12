@@ -16,6 +16,9 @@ services:
     restart: always
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      - MIBS=  # Disable MIB parsing (important)
+      - TELEGRAF_SNMP_MIBS=  # Prevent Telegraf from searching for MIBs
     depends_on:
       - influxdb
 

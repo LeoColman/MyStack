@@ -16,9 +16,11 @@ services:
     restart: always
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./snmp-mibs:/usr/share/snmp/mibs:ro  # Mount MIB files
     environment:
-      - MIBS=  # Disable MIB parsing (important)
-      - TELEGRAF_SNMP_MIBS=  # Prevent Telegraf from searching for MIBs
+      - MIBS=ALL  # Enable MIBs
+      - TELEGRAF_SNMP_MIBS=/usr/share/snmp/mibs  # Set MIB directory
+      - SNMP_MIB_DIRS=/usr/share/snmp/mibs  # Ensure MIBs are loaded
     depends_on:
       - influxdb
 

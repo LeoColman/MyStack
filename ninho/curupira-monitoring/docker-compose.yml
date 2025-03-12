@@ -3,6 +3,7 @@ version: '3.8'
 name: curupira-monitoring
 
 services:
+
   prometheus:
     image: prom/prometheus:latest
     restart: always
@@ -11,25 +12,25 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
-      - "9090:9090"  # Expose Prometheus Web UI
+      - "9090:9090"
     depends_on:
       - snmp-exporter
 
   snmp-exporter:
-    image: prom/snmp-exporter
+    image: prom/snmp-exporter:latest
     restart: always
     volumes:
       - ./snmp.yml:/etc/snmp_exporter/snmp.yml:ro
     command:
       - "--config.file=/etc/snmp_exporter/snmp.yml"
     ports:
-      - "9116:9116"  # SNMP Exporter Web UI (metrics)
-  
+      - "9116:9116"
+
   grafana:
     image: grafana/grafana:latest
     restart: always
     ports:
-      - "3000:3000"  # Grafana Web UI
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin

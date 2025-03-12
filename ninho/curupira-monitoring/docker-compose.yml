@@ -21,6 +21,7 @@ services:
       - MIBS=ALL  # Enable MIBs
       - TELEGRAF_SNMP_MIBS=/usr/share/snmp/mibs  # Set MIB directory
       - SNMP_MIB_DIRS=/usr/share/snmp/mibs  # Ensure MIBs are loaded
+      - INFLUXDB_DB=telegraf
     depends_on:
       - influxdb
 

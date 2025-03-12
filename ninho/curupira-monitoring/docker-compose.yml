@@ -1,41 +1,42 @@
+version: '3.8'
+
 name: curupira-monitoring
+
 services:
-  
-  influxdb:
-    image: influxdb:1.8
-    restart: always
-    environment:
-      - INFLUXDB_DB=snmp
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
-    volumes:
-      - influxdb-data:/var/lib/influxdb
-
-  telegraf:
-    image: telegraf:latest
+  prometheus:
+    image: prom/prometheus:latest
     restart: always
     volumes:
-      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
-      - ./snmp-mibs:/usr/share/snmp/mibs:ro  # Mount MIB files
-    environment:
-      - MIBS=ALL  # Enable MIBs
-      - TELEGRAF_SNMP_MIBS=/usr/share/snmp/mibs  # Set MIB directory
-      - SNMP_MIB_DIRS=/usr/share/snmp/mibs  # Ensure MIBs are loaded
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"  # Expose Prometheus Web UI
     depends_on:
-      - influxdb
+      - snmp-exporter
 
+  snmp-exporter:
+    image: prom/snmp-exporter
+    restart: always
+    volumes:
+      - ./snmp.yml:/etc/snmp_exporter/snmp.yml:ro
+    command:
+      - "--config.file=/etc/snmp_exporter/snmp.yml"
+    ports:
+      - "9116:9116"  # SNMP Exporter Web UI (metrics)
+  
   grafana:
     image: grafana/grafana:latest
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Grafana Web UI
     environment:
       - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana-data:/var/lib/grafana
     depends_on:
-      - influxdb
+      - prometheus
 
 volumes:
-  influxdb-data:
   grafana-data:

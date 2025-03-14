@@ -32,6 +32,7 @@ services:
       - REDMINE_SECRET_KEY_BASE
       - REDMINE_DB_MYSQL=database
       - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_ENCODING=utf8mb4
     networks:
       - caddy
       - default

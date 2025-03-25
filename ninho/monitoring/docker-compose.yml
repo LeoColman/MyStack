@@ -44,21 +44,10 @@ services:
       caddy.reverse_proxy: "{{upstreams 3000}}"
       caddy.tls: internal
       
-  avahi:
-    image: ydkn/avahi-alias:latest
-    restart: unless-stopped
-    networks:
-      avahi_macvlan:
-        ipv4_address: 192.168.1.250  # Unique IP in your LAN subnet
-    environment:
-      - ALIASES=grafana.ninho.local,prometheus.ninho.local,snmp-exporter.ninho.local
-
 
 networks:
   monitoring:
   caddy:
-    external: true
-  avahi_macvlan:
     external: true
 
 volumes:

@@ -58,6 +58,8 @@ networks:
   monitoring:
   caddy:
     external: true
+  avahi_macvlan:
+    external: true
 
 volumes:
   prometheus_data:

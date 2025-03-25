@@ -3,7 +3,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_config:/etc/prometheus/
       - prometheus_data:/prometheus
     restart: unless-stopped
     networks:
@@ -18,7 +18,7 @@ services:
   snmp-exporter:
     image: prom/snmp-exporter:latest
     volumes:
-      - ./snmp.yml:/etc/snmp_exporter/snmp.yml
+      - snmp_config:/etc/snmp_exporter/
     restart: unless-stopped
     networks:
       - monitoring
@@ -52,4 +52,6 @@ networks:
 
 volumes:
   prometheus_data:
+  prometheus_config:
   grafana_data:
+  snmp_config:

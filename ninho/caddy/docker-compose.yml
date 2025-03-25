@@ -16,6 +16,7 @@ services:
     deploy:
       labels:
         caddy.email: caddy@colman.com.br
+        tls: internal
 
 networks:
   caddy:

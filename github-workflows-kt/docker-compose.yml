@@ -18,14 +18,13 @@ services:
     image: krzema12/github-workflows-kt-jit-binding-server # dclint disable-line
     environment:
       - GITHUB_TOKEN
+      - APP_PRIVATE_KEY
     networks:
       - prometheus
       - caddy
     labels:
       caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
-    ports:
-      - "8081:8080"
 
   grafana:
     image: grafana/grafana:11.5.2

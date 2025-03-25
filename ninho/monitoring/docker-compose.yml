@@ -1,0 +1,49 @@
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+    networks:
+      - monitoring
+      - caddy
+    labels:
+      caddy: prometheus.local
+      caddy.reverse_proxy: "{{upstreams 9090}}"
+
+  snmp-exporter:
+    image: prom/snmp-exporter:latest
+    volumes:
+      - ./snmp.yml:/etc/snmp_exporter/snmp.yml
+    restart: unless-stopped
+    networks:
+      - monitoring
+      - caddy
+    labels:
+      caddy: snmp-exporter.local
+      caddy.reverse_proxy: "{{upstreams 9116}}"
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - monitoring
+      - caddy
+    labels:
+      caddy: grafana.local
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+
+networks:
+  monitoring:
+  caddy:
+    external: true
+
+volumes:
+  prometheus_data:
+  grafana_data:

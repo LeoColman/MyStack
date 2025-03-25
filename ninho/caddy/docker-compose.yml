@@ -1,0 +1,25 @@
+# dclint disable require-project-name-field
+services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.9.2-alpine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    networks:
+      caddy:
+    healthcheck:
+      test: [ "CMD", "/bin/caddy", "version" ]
+    labels:
+      caddy.email: caddy@colman.com.br
+      caddy.tls: internal
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  caddy_data:

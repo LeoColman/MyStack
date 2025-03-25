@@ -10,7 +10,7 @@ services:
       - monitoring
       - caddy
     labels:
-      caddy: prometheus.local
+      caddy: prometheus.ninho.local
       caddy.reverse_proxy: "{{upstreams 9090}}"
       caddy.tls: internal
       
@@ -24,7 +24,7 @@ services:
       - monitoring
       - caddy
     labels:
-      caddy: snmp-exporter.local
+      caddy: snmp-exporter.ninho.local
       caddy.reverse_proxy: "{{upstreams 9116}}"
       caddy.tls: internal
       
@@ -40,7 +40,7 @@ services:
       - monitoring
       - caddy
     labels:
-      caddy: grafana.local
+      caddy: grafana.ninho.local
       caddy.reverse_proxy: "{{upstreams 3000}}"
       caddy.tls: internal
       

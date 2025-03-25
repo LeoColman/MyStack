@@ -12,6 +12,8 @@ services:
     labels:
       caddy: prometheus.local
       caddy.reverse_proxy: "{{upstreams 9090}}"
+      caddy.tls: internal
+      
 
   snmp-exporter:
     image: prom/snmp-exporter:latest
@@ -24,6 +26,8 @@ services:
     labels:
       caddy: snmp-exporter.local
       caddy.reverse_proxy: "{{upstreams 9116}}"
+      caddy.tls: internal
+      
 
   grafana:
     image: grafana/grafana-oss:latest
@@ -38,6 +42,8 @@ services:
     labels:
       caddy: grafana.local
       caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.tls: internal
+      
 
 networks:
   monitoring:

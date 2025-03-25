@@ -5,6 +5,7 @@ services:
     volumes:
       - database:/data/database
       - redmine:/data/redmine
+      - redmine-files:/data/redmine/files
       - ssh:/root/.ssh/
     configs:
       - source: borgmatic-config-redmine
@@ -40,6 +41,7 @@ services:
       - default
     volumes:
       - redmine:/usr/src/redmine
+      - redmine-files:/usr/src/redmine/files
     labels:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -50,6 +52,7 @@ networks:
 
 volumes:
   redmine: {}
+  redmine-files: {}
   database: {}
   ssh:
     external: true

@@ -13,8 +13,9 @@ services:
       caddy:
     healthcheck:
       test: [ "CMD", "/bin/caddy", "version" ]
-    labels:
-      caddy.email: caddy@colman.com.br
+    deploy:
+      labels:
+        caddy.email: caddy@colman.com.br
 
 networks:
   caddy:

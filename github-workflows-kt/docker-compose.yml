@@ -40,7 +40,7 @@ services:
       - GF_SMTP_USER
       - GF_SMTP_PASSWORD
       - GF_SMTP_ENABLED=true
-      - GF_SMTP_HOST=postal.colman.com.br
+      - GF_SMTP_HOST=postal.colman.com.br:25
       - GF_SMTP_FROM_ADDRESS=no-reply@colman.com.br
       - GF_SMTP_FROM_NAME=Grafana GitHub Workflows Kt
       - GF_SMTP_SKIP_VERIFY=false

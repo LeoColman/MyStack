@@ -25,6 +25,7 @@ services:
     labels:
       caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
+      com.centurylinklabs.watchtower.enable: "true"
 
   grafana:
     image: grafana/grafana:11.5.2

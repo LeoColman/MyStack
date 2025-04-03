@@ -1,22 +1,21 @@
 services:
   diun:
     image: crazymax/diun:latest
+    container_name: diun
+    command: serve
     volumes:
       - diun-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - TZ=UTC
+      - TZ=America/Sao_Paulo
       - LOG_LEVEL=info
       - LOG_JSON=false
-      - DIUN_WATCH_SCHEDULE=0 */10 * * * *
+      - DIUN_WATCH_WORKERS=20
+      - DIUN_WATCH_SCHEDULE=0 */6 * * *
       - DIUN_WATCH_JITTER=30s
       - DIUN_PROVIDERS_DOCKER=true
-      - DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT=false
-      - DIUN_NOTIF_STDOUT=true
-      - DIUN_NOTIF_COMMAND='{"cmd":"/bin/sh","args":["-c","docker service update --force $DIUN_ENTRY_NAME"]}'
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
+      - DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT=true
+    restart: always
+    
 volumes:
   diun-data:

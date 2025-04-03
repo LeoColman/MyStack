@@ -19,6 +19,8 @@ services:
     environment:
       - GITHUB_TOKEN
       - APP_PRIVATE_KEY
+      - APP_INSTALLATION_ID
+      - APP_CLIENT_ID
     networks:
       - prometheus
       - caddy

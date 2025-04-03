@@ -17,7 +17,6 @@ services:
   github-workflows-kt:
     image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line
     environment:
-      - GITHUB_TOKEN
       - APP_PRIVATE_KEY
       - APP_INSTALLATION_ID
       - APP_CLIENT_ID

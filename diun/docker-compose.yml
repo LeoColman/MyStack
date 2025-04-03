@@ -17,3 +17,6 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+
+volumes:
+  diun-data:

@@ -15,7 +15,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
   
   github-workflows-kt:
-    image: krzema12/github-workflows-kt-jit-binding-server # dclint disable-line
+    image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line
     environment:
       - GITHUB_TOKEN
       - APP_PRIVATE_KEY

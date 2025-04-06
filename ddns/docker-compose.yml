@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   dns-server:
-    image: technitium/dns-server:13.4.3
+    image: technitium/dns-server:13.5.0
     volumes:
       - config:/etc/dns
     environment:

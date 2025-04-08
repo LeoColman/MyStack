@@ -27,7 +27,7 @@ services:
       - MYSQL_COLLATION=utf8mb4_unicode_ci
 
   redmine:
-    image: redmine:6
+    image: redmine:6.0.3
     depends_on:
       - database
     environment:

@@ -2,7 +2,7 @@
 services:
   
   backup:
-    image: b3vis/borgmatic:1.9
+    image: b3vis/borgmatic:2.0
     volumes:
       - grafana:/data/grafana
       - prometheus:/data/prometheus

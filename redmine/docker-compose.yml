@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   borgmatic:
-    image: b3vis/borgmatic:1.9
+    image: b3vis/borgmatic:2.0
     volumes:
       - database:/data/database
       - redmine:/data/redmine

@@ -25,7 +25,6 @@ services:
 
   miniserve:
     image: svenstaro/miniserve
-    command: "--index /data"
     volumes:
       - /hdd/torrents:/data
     network_mode: "service:gluetun"

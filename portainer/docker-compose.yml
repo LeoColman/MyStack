@@ -11,7 +11,7 @@ services:
       mode: global
 
   backup:
-    image: b3vis/borgmatic:2.0
+    image: b3vis/borgmatic:2.0.2-fix
     volumes:
       - portainer_data:/data/portainer
       - ssh:/root/.ssh/

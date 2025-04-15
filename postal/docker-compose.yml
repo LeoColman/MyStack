@@ -17,7 +17,7 @@ x-environment: &postal
 
 services:
   backup:
-    image: b3vis/borgmatic:2.0
+    image: b3vis/borgmatic:2.0.2-fix
     volumes:
       - database:/data/database
       - postal-config:/data/postal

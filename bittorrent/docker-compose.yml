@@ -31,6 +31,13 @@ services:
     network_mode: "service:gluetun"
     depends_on:
       - gluetun
+    environment:
+      MINISERVE_ENABLE_TAR: "true"
+      MINISERVE_ENABLE_TAR_GZ: "true"
+      MINISERVE_HIDE_THEME_SELECTOR: "true"
+      MINISERVE_HIDE_VERSION_FOOTER: "true"
+      
+      
 
   opentracker:
     image: lednerb/opentracker-docker:latest@sha256:a055447e44450036b7b2a923618b12d4ecf1eff3c894e969cc2c42f466b2c6f6

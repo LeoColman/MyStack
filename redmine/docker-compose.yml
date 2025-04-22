@@ -40,7 +40,6 @@ services:
       - caddy
       - default
     volumes:
-      - redmine:/usr/src/redmine
       - redmine-files:/usr/src/redmine/files
     labels:
       caddy: redmine.colman.com.br

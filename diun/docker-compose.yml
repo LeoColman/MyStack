@@ -6,6 +6,7 @@ services:
     volumes:
       - diun-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker  # 👈 Bind mount docker binary from host
     environment:
       - TZ=America/Sao_Paulo
       - LOG_LEVEL=info
@@ -16,11 +17,12 @@ services:
       - DIUN_PROVIDERS_DOCKER=true
       - DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT=false
 
-      # ✅ Script notifier: blindly update matching Swarm service
+      # ✅ Script notifier: now works
       - DIUN_NOTIF_SCRIPT=true
       - DIUN_NOTIF_SCRIPT_CMD=/bin/sh
       - DIUN_NOTIF_SCRIPT_ARGS=-c,docker service update --force "$DIUN_ENTRY_METADATA_CTN_NAMES"
     restart: always
+    network_mode: host  # 👈 Required if not using host.docker.internal
 
 volumes:
   diun-data:

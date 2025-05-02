@@ -48,7 +48,7 @@ services:
       - GF_SMTP_SKIP_VERIFY=false
 
   prometheus:
-    image: prom/prometheus:v3.3.0
+    image: prom/prometheus:v3.3.1
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml

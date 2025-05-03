@@ -19,8 +19,8 @@ services:
 
       # ✅ Script notifier: now works
       - DIUN_NOTIF_SCRIPT=true
-      - DIUN_NOTIF_SCRIPT_CMD=/bin/sh
-      - DIUN_NOTIF_SCRIPT_ARGS=-c,/usr/bin/docker service update --force "$DIUN_ENTRY_METADATA_CTN_NAMES"
+      - DIUN_NOTIF_SCRIPT_CMD=/usd/bin/docker
+      - DIUN_NOTIF_SCRIPT_ARGS=service update --force "$DIUN_ENTRY_METADATA_CTN_NAMES"
     restart: always
     network_mode: host  # 👈 Required if not using host.docker.internal
 

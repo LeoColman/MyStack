@@ -96,7 +96,7 @@ services:
       test: curl -sSf 'http://localhost/status.php' | grep '"installed":true' | grep '"maintenance":false' | grep '"needsDbUpgrade":false' || exit 1
 
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 

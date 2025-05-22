@@ -29,7 +29,7 @@ services:
       diun.enable: "true"
 
   grafana:
-    image: grafana/grafana:11.6.1
+    image: grafana/grafana:11.6.2
     networks:
       - prometheus
       - caddy

@@ -65,40 +65,18 @@ services:
       - prometheus:/prometheus
 
   loki:
-    image: grafana/loki:3.0.0
-    command:
-      - -config.file=/etc/loki/loki.yaml
-    configs:
-      - source: loki-config
-        target: /etc/loki/loki.yaml
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - prometheus
       - caddy
     labels:
       caddy: loki.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3100}}"
-    volumes:
-      - loki:/loki
 
-  promtail:
-    image: grafana/promtail:3.0.0
-    depends_on:
-      - loki
-    command:
-      - -config.file=/etc/promtail/promtail.yaml
-    configs:
-      - source: promtail-config
-        target: /etc/promtail/promtail.yaml
-    networks:
-      - prometheus
-    volumes:
-      - /var/log:/var/log:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-  
+
 volumes:
   grafana:
   prometheus:
-  loki:
   ssh:
     external: true
 
@@ -111,8 +89,4 @@ configs:
   prometheus:
     external: true
   borgmatic-config-github-workflows-kt:
-    external: true
-  loki-config:
-    external: true
-  promtail-config:
     external: true

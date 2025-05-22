@@ -65,7 +65,7 @@ services:
       - prometheus:/prometheus
 
   loki:
-    image: grafana/loki:3.0.0
+    image: grafana/loki:3.5.1
     command:
       - -config.file=/etc/loki/loki.yaml
     configs:

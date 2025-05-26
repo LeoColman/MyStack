@@ -28,6 +28,23 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
       diun.enable: "true"
 
+  prometheus:
+    image: prom/prometheus:v3.3.1
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+    labels:
+      caddy: prometheus.bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 9090}}"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-remote-write-receiver"
+    networks:
+      - prometheus
+      - caddy
+    volumes:
+      - prometheus:/prometheus
+
   grafana:
     image: grafana/grafana:11.6.1
     networks:
@@ -47,31 +64,23 @@ services:
       - GF_SMTP_FROM_NAME=Grafana GitHub Workflows Kt
       - GF_SMTP_SKIP_VERIFY=false
 
-  prometheus:
-    image: prom/prometheus:v3.3.1
-    configs:
-      - source: prometheus
-        target: /etc/prometheus/prometheus.yml
-    labels:
-      caddy: prometheus.bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 9090}}"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--web.enable-remote-write-receiver"
-    networks:
-      - prometheus
-      - caddy
-    volumes:
-      - prometheus:/prometheus
-
   loki:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - caddy
+      - prometheus
     labels:
       caddy: loki.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3100}}"
+      
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - prometheus
 
 
 volumes:

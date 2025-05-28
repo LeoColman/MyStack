@@ -74,9 +74,6 @@ services:
     networks:
       - caddy
       - prometheus
-    labels:
-      caddy: loki.bindings.colman.com.br
-      caddy.reverse_proxy: "{{upstreams 3100}}"
       
   promtail:
     image: grafana/promtail:latest

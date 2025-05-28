@@ -27,8 +27,6 @@ services:
       caddy: bindings.krzeminski.it
       caddy.reverse_proxy: "{{upstreams 8080}}"
       diun.enable: "true"
-    logging:
-      driver: loki
 
   prometheus:
     image: prom/prometheus:v3.3.1

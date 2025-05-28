@@ -30,7 +30,7 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: http://loki:3100/loki/api/v1/push
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
 
   prometheus:
     image: prom/prometheus:v3.3.1
@@ -74,7 +74,9 @@ services:
     networks:
       - caddy
       - prometheus
-      
+    ports:
+      - "127.0.0.1:3100:3100"
+
   promtail:
     image: grafana/promtail:latest
     volumes:

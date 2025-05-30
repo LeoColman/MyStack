@@ -28,7 +28,7 @@ services:
       caddy: grafana-test.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
     volumes:
-      - grafana-test
+      - grafana-test:/var/lib/grafana
     environment:
       - GF_SMTP_USER
       - GF_SMTP_PASSWORD

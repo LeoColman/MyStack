@@ -20,7 +20,7 @@ services:
         loki-url: http://loki:3100/loki/api/v1/push
         
   grafana:
-    image: grafana/grafana:11.6.1
+    image: grafana/grafana:11.6.2
     networks:
       - prometheus
       - caddy

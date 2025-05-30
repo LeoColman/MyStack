@@ -74,9 +74,7 @@ services:
     networks:
       - caddy
       - prometheus
-    ports:
-      - "127.0.0.1:3100:3100"
-    
+      
   promtail:
     image: grafana/promtail:latest
     volumes:

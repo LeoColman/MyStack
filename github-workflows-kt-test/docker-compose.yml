@@ -1,0 +1,62 @@
+# dclint disable require-project-name-field
+services:
+  
+  github-workflows-kt:
+    image: krzema12/github-workflows-kt-jit-binding-server:latest # dclint disable-line
+    environment:
+      - APP_PRIVATE_KEY
+      - APP_INSTALLATION_ID
+      - APP_CLIENT_ID
+    networks:
+      - prometheus
+      - caddy
+    labels:
+      caddy: bindings-test.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+      diun.enable: "true"
+    logging:
+      driver: loki
+      options:
+        loki-url: http://loki:3100/loki/api/v1/push
+        
+  grafana:
+    image: grafana/grafana:11.6.1
+    networks:
+      - prometheus
+      - caddy
+    labels:
+      caddy: grafana-test.bindings.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    volumes:
+      - grafana-test
+    environment:
+      - GF_SMTP_USER
+      - GF_SMTP_PASSWORD
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=postal.colman.com.br:25
+      - GF_SMTP_FROM_ADDRESS=no-reply@colman.com.br
+      - GF_SMTP_FROM_NAME=Grafana GitHub Workflows Kt
+      - GF_SMTP_SKIP_VERIFY=false
+
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - caddy
+      - prometheus
+      
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - prometheus
+
+
+volumes:
+  grafana-test:
+
+networks:
+  caddy:
+    external: true

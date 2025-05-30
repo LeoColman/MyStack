@@ -8,8 +8,8 @@ services:
       - APP_INSTALLATION_ID
       - APP_CLIENT_ID
     networks:
-      - prometheus
       - caddy
+      - default
     labels:
       caddy: bindings-test.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -22,8 +22,8 @@ services:
   grafana:
     image: grafana/grafana:11.6.1
     networks:
-      - prometheus
       - caddy
+      - default
     labels:
       caddy: grafana-test.bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -42,16 +42,13 @@ services:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - caddy
-      - prometheus
+      - default
       
   promtail:
     image: grafana/promtail:latest
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
-    networks:
-      - prometheus
 
 
 volumes:

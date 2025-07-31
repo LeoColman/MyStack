@@ -38,8 +38,8 @@ services:
       - default
       - caddy
     labels:
-      caddy_0: leonardo.colman.com.br
-      caddy_0.reverse_proxy: "{{upstreams 80}}"
+      caddy: leonardo.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 80}}"
 
 networks:
   caddy:

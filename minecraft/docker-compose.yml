@@ -1,0 +1,47 @@
+services:
+  backup:
+    image: b3vis/borgmatic:2.0.2-fix
+    volumes:
+      - minecraft-data:/data/minecraft
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-minecraft
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+    
+  atm10:
+    image: itzg/minecraft-server:java17
+    ports:
+      - "25565:25565"
+    volumes:
+      - minecraft-data:/data          # world, configs, mods
+    environment:
+      - WHITELIST
+      - CF_API_KEY
+      - EULA=TRUE
+      - TYPE=AUTO_CURSEFORGE
+      - CF_SLUG=all-the-mods-10
+      - MEMORY=10G
+      - ENABLE_WHITELIST=TRUE
+      - ENFORCE_WHITELIST=TRUE
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: minecraft.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 25565}}"
+
+    restart: unless-stopped
+
+
+volumes:
+  minecraft-data:
+    
+configs:
+  borgmatic-config-minecraft:
+    external: true
+networks:
+  caddy:
+    external: true

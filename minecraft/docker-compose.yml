@@ -38,6 +38,8 @@ services:
 
 volumes:
   minecraft-data:
+  ssh:
+    external: true
     
 configs:
   borgmatic-config-minecraft:

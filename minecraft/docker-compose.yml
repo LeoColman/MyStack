@@ -26,6 +26,7 @@ services:
       - MEMORY=10G
       - ENABLE_WHITELIST=TRUE
       - ENFORCE_WHITELIST=TRUE
+      - ALLOW_FLIGHT=TRUE
     networks:
       - default
       - caddy

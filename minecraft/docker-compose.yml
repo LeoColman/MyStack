@@ -26,9 +26,6 @@ services:
       - MEMORY=10G
       - ENABLE_WHITELIST=TRUE
       - ENFORCE_WHITELIST=TRUE
-      - ENABLE_AUTOPAUSE=TRUE
-      - AUTOPAUSE_TIMEOUT_EST=30
-      - MAX_TICK_TIME=-1
     networks:
       - default
       - caddy

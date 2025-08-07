@@ -27,6 +27,7 @@ services:
       - ENABLE_WHITELIST=TRUE
       - ENFORCE_WHITELIST=TRUE
       - ALLOW_FLIGHT=TRUE
+      - RATE_LIMIT=0
     networks:
       - default
       - caddy

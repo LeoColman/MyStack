@@ -29,6 +29,10 @@ services:
       - ALLOW_FLIGHT=TRUE
       - RATE_LIMIT=0
       - PVP=FALSE
+      - MAX_TICK_TIME=-1
+      - VIEW_DISTANCE=6
+      - SIMULATION_DISTANCE=5
+      - NETWORK_COMPRESSION_THRESHOLD=512
     networks:
       - default
       - caddy

@@ -33,6 +33,7 @@ services:
       - VIEW_DISTANCE=6
       - SIMULATION_DISTANCE=5
       - NETWORK_COMPRESSION_THRESHOLD=512
+      - OPS=LeoColman
     networks:
       - default
       - caddy

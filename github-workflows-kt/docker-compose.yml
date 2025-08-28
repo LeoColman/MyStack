@@ -33,7 +33,7 @@ services:
         loki-url: http://127.0.0.1:3100/loki/api/v1/push
 
   prometheus:
-    image: prom/prometheus:v3.5.0
+    image: prom/prometheus:v3.3.1
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
@@ -50,7 +50,7 @@ services:
       - prometheus:/prometheus
 
   grafana:
-    image: grafana/grafana:12.1.1
+    image: grafana/grafana:11.6.1
     networks:
       - prometheus
       - caddy

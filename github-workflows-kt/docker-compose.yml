@@ -50,7 +50,7 @@ services:
       - prometheus:/prometheus
 
   grafana:
-    image: grafana/grafana:11.6.1
+    image: grafana/grafana:12.1.1
     networks:
       - prometheus
       - caddy

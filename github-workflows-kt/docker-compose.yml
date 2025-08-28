@@ -43,6 +43,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
+      - "--log.level=debug" # Set the desired log level here (debug, info, warn, error)
     networks:
       - prometheus
       - caddy

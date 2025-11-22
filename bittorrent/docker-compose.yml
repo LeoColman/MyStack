@@ -53,7 +53,7 @@ services:
       test: ["CMD", "wget", "--spider", "http://0.0.0.0:6969"]
 
   qbittorrent:
-    image: ghcr.io/linuxserver/qbittorrent:5.1.0
+    image: ghcr.io/linuxserver/qbittorrent:5.1.4
     volumes:
       - qbittorrent-config:/config
       - /hdd/torrents:/downloads

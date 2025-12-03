@@ -2,7 +2,7 @@
 
 services:
   borgmatic:
-    image: b3vis/borgmatic:2.0.2-fix
+    image: b3vis/borgmatic:2.0.11
     volumes:
       - postgres-data:/data/database
       - ssh:/root/.ssh/

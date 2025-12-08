@@ -42,6 +42,7 @@ services:
     volumes:
       - redmine:/usr/src/redmine
       - redmine-files:/usr/src/redmine/files
+      - redmine-plugins:/usr/src/redmine/plugins
     labels:
       caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -53,6 +54,7 @@ networks:
 volumes:
   redmine: {}
   redmine-files: {}
+  redmine-plugins: {}
   database: {}
   ssh:
     external: true

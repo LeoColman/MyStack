@@ -24,7 +24,7 @@ services:
       - prometheus
       - caddy
     labels:
-      caddy: bindings.krzeminski.it
+      caddy: bindings.krzeminski.it, github-workflows-kt-bindings.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
       diun.enable: "true"
     logging:

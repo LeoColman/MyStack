@@ -44,7 +44,7 @@ services:
       - redmine-files:/usr/src/redmine/files
       - redmine-plugins:/usr/src/redmine/plugins
     labels:
-      caddy: test.colman.com.br
+      caddy: redmine.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
 networks:

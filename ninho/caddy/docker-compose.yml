@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:2.9.2-alpine
+    image: lucaslorentz/caddy-docker-proxy:2.10.0-alpine
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data

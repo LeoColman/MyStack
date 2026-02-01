@@ -5,6 +5,7 @@ services:
     volumes:
       - database:/data/database
       - redmine:/data/redmine
+      - redmine-plugins:/data/redmine-plugins
       - ssh:/root/.ssh/
     configs:
       - source: borgmatic-config-redmine

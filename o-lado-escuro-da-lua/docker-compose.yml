@@ -1,0 +1,43 @@
+# dclint disable require-project-name-field
+services:
+  borgmatic:
+    image: b3vis/borgmatic:2.0.11
+    volumes:
+      - mybibliotheca_data:/data/mybibliotheca
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-o-lado-escuro-da-lua
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
+  mybibliotheca:
+    image: pickles4evaaaa/mybibliotheca:2.1.0
+    volumes:
+      - mybibliotheca_data:/app/data
+    environment:
+      - SECRET_KEY
+      - SECURITY_PASSWORD_SALT
+      - TIMEZONE=America/Sao_Paulo
+      - WORKERS=${WORKERS:-4}
+    restart: unless-stopped
+    networks:
+      - caddy
+      - default
+    labels:
+      caddy: o-lado-escuro-da-lua.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 5054}}"
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  mybibliotheca_data:
+  ssh:
+    external: true
+
+configs:
+  borgmatic-config-o-lado-escuro-da-lua:
+    external: true

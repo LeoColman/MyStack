@@ -1,7 +1,7 @@
 # dclint disable require-project-name-field
 services:
   borgmatic:
-    image: b3vis/borgmatic:2.0.11
+    image: b3vis/borgmatic:2.1.2
     volumes:
       - mybibliotheca_data:/data/mybibliotheca
       - ssh:/root/.ssh/

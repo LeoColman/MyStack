@@ -20,7 +20,7 @@ services:
         loki-url: http://127.0.0.1:3101/loki/api/v1/push
         
   grafana:
-    image: grafana/grafana:11.6.1
+    image: grafana/grafana:11.6.11
     networks:
       - caddy
       - default

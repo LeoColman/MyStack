@@ -14,9 +14,6 @@ services:
 
   webtop:
     image: lscr.io/linuxserver/webtop
-    security_opt:
-      - seccomp:unconfined
-    shm_size: "1gb"
     environment:
       - PUID=1000
       - PGID=1000
@@ -24,12 +21,15 @@ services:
       - PASSWORD
     volumes:
       - webtop-config:/config
+      - type: tmpfs          # replaces shm_size (unsupported in swarm)
+        target: /dev/shm
+        tmpfs:
+          size: 1073741824   # 1GB
     networks:
       - caddy
       - default
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      test: ["CMD", "wget", "--spider", "http://localhost:3001"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -37,6 +37,8 @@ services:
       caddy: vps.colman.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
     deploy:
+      restart_policy:
+        condition: on-failure
       resources:
         limits:
           cpus: "2.0"

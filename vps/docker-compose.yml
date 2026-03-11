@@ -13,7 +13,7 @@ services:
       - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
 
   webtop:
-    image: lscr.io/linuxserver/webtop:alpine-xfce
+    image: lscr.io/linuxserver/webtop
     security_opt:
       - seccomp:unconfined
     shm_size: "1gb"

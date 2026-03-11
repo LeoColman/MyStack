@@ -1,0 +1,56 @@
+# dclint disable require-project-name-field
+services:
+  backup:
+    image: b3vis/borgmatic:2.0.2-fix
+    volumes:
+      - webtop-config:/data/webtop
+      - ssh:/root/.ssh/
+    configs:
+      - source: borgmatic-config-webtop
+        target: /etc/borgmatic.d/config.yaml
+    environment:
+      - BORG_PASSPHRASE
+      - BACKUP_CRON=0 1 * * * # Remove when https://github.com/borgmatic-collective/docker-borgmatic/issues/375 is fixed
+
+  webtop:
+    image: lscr.io/linuxserver/webtop:alpine-xfce
+    security_opt:
+      - seccomp:unconfined
+    shm_size: "1gb"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - PASSWORD
+    volumes:
+      - webtop-config:/config
+    networks:
+      - caddy
+      - default
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      caddy: vps.colman.com.br
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  webtop-config:
+  ssh:
+    external: true
+
+configs:
+  borgmatic-config-webtop:
+    external: true

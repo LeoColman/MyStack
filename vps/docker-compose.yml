@@ -18,6 +18,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Sao_Paulo
+      - CUSTOM_USER=admin
       - PASSWORD
     volumes:
       - webtop-config:/config

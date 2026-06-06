@@ -64,7 +64,7 @@ services:
       - default
     command: postal web-server
     labels:
-      caddy: "postal.colman.com.br"
+      caddy: "postal.colman.com.br track.postal.colman.com.br click.o-objeto.com.br"
       caddy.reverse_proxy: "{{upstreams 5000}}"
   
 

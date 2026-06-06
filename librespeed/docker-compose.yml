@@ -10,7 +10,7 @@ services:
     networks:
       - caddy
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8080" ]
     labels:
       caddy: librespeed.colman.com.br
       caddy.reverse_proxy: "{{upstreams 8080}}"
